@@ -13,7 +13,7 @@ public class ScoreManager : MonoBehaviour
             Destroy(gameObject);
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
     public int score { get; private set; }
     // Start is called before the first frame update

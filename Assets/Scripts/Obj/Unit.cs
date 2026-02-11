@@ -8,21 +8,12 @@ public class Unit : MonoBehaviour
     public float scaleX = 1;
     public float unitStartTime = 0;
     public float unitEndTime = 0;
-    private CapsuleCollider2D capsuleCollider;
     private float startTime;
     private float startPos;
     private float endPos;
     // Start is called before the first frame update
     void Start()
     {
-        capsuleCollider = GetComponent<CapsuleCollider2D>();
-        if(capsuleCollider == null )
-        {
-            Debug.LogWarning("预设体缺少CapsuleCollider2D组件");
-            capsuleCollider = gameObject.AddComponent<CapsuleCollider2D>();
-        }
-        capsuleCollider.enabled = true;
-        capsuleCollider.size = new Vector2(scaleX , 1);
         transform.localScale = new Vector3(scaleX, 1, 1);
         startTime = Time.time;
         startPos = transform.position.y;
@@ -37,5 +28,11 @@ public class Unit : MonoBehaviour
             transform.Translate(Vector3.down * Time.deltaTime * speed);
         else
             transform.position = new Vector3(transform.position.x, Mathf.Lerp(startPos,endPos, t), transform.position.z);
+    }
+    public void HitUnit()
+    {
+        GameObject eff = Instantiate(Resources.Load<GameObject>("Effect/WaveEff"), transform.position, Quaternion.identity);
+        Destroy(eff, 0.5f); // 销毁特效
+        Destroy(gameObject);
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MusicUnit
   - InvalidMusicUnit
+  - Track
   layers:
   - Default
   - TransparentFX
