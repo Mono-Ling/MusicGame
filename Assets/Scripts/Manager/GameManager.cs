@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
         //DontDestroyOnLoad(gameObject);
     }
     public Queue<UnitData> unitDataQueue = new Queue<UnitData>();
+    public float moveTime = 2;
     public float time {  get; private set; }
     private bool musicPlaying = false;
     private List<UnitData> unitDataList = DataManager.Instance.unitDataList.unitList;
@@ -61,13 +62,17 @@ public class GameManager : MonoBehaviour
     IEnumerator UpdateMusicGameUnit()
     {
         UnitData firstUnitData = unitDataQueue.Peek();
+        firstUnitData.SetStartTime(moveTime);
         yield return new WaitForSeconds(firstUnitData.startTime);
         while (unitDataQueue.Count > 0)
         {
             UnitData unitData = unitDataQueue.Dequeue();
+            unitData.SetStartTime(moveTime);
             UnitManager.Instance.CreateUnit(unitData);
             if (unitDataQueue.Count == 0) break;
-            float timeToNextUnit = unitDataQueue.Peek().startTime - unitData.startTime;
+            UnitData nextUnit = unitDataQueue.Peek();
+            nextUnit.SetStartTime(moveTime);
+            float timeToNextUnit = nextUnit.startTime - unitData.startTime;
             yield return new WaitForSeconds(timeToNextUnit);
         }
         Debug.Log("Ð­³Ì½áÊø");

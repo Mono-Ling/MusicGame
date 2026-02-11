@@ -17,7 +17,8 @@ public class Track : MonoBehaviour
         Vector3 pos = Camera.main.ScreenToWorldPoint(new Vector3(screenStep.x * (id + 0.5f),screenStep.y, 0));
         pos.y = 0;
         transform.position = pos;
-        boxCollider.size = new Vector2(Camera.main.orthographicSize * 2 * Camera.main.aspect / 6, 10);
+        float height = Camera.main.orthographicSize * 2f;
+        boxCollider.size = new Vector2(height * Camera.main.aspect / 6, height);
     }
     public Unit ComparInputUnit(float time, float window)
     {

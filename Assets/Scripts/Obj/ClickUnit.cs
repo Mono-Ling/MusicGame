@@ -5,10 +5,10 @@ using UnityEngine;
 public class ClickUnit : Unit
 {
     private const string shaderName = "Unlit/ClickUnit";
-    protected override void Start()
+    protected override void InitMaterial()
     {
         shader = Shader.Find(shaderName);
-        base.Start();
+        base.InitMaterial();
     }
     public override void HitUnit(float time = 0)
     {

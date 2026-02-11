@@ -11,15 +11,19 @@ public class HoldUnit : Unit
     private bool isHold;
     private float holdProgress;
     private const string shaderName = "Unlit/HoldUnit";
-    protected override void Start()
+    protected override void SetScale()
     {
-        shader = Shader.Find(shaderName);
-        base.Start();
-        float far = startPos - endPos;
+        base.SetScale();
+        float far = startPos - hitPos;
         float moveTime = unitHitTime - unitStartTime;
         float step = far / moveTime;
         scaleY = step * unitDuration;
         transform.localScale = new Vector3(scaleX, scaleY, 1);
+    }
+    protected override void InitMaterial()
+    {
+        shader = Shader.Find(shaderName);
+        base.InitMaterial();
         //material.SetColor("_EdgeStartColor",edgeStartColor);
         //material.SetColor("_EdgeEndColor",edgeEndColor);
         //material.SetFloat("_EdgeThreshold", edgeThreshold);

@@ -80,7 +80,7 @@ public class UnitManager : MonoBehaviour
             }
         }
     }
-    public void CreateUnit(UnitData unitData)
+    public void CreateUnit(UnitData unitData,float moveTime = 2)
     {
         GameObject unitPrefab = Resources.Load<GameObject>($"MusicGameUnit/{unitData.unitType}");
         GameObject unitObj = Instantiate(unitPrefab);
@@ -91,7 +91,7 @@ public class UnitManager : MonoBehaviour
         unit.unitHitTime = unitData.hitTime;
         unit.unitStartTime = unitData.startTime;
         unit.unitDuration = unitData.duration;
-        unit.type = GetUnitType(unitData.unitType);
+        unit.type = Unit.GetUnitType(unitData.unitType);
         unitObj.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(screenStep.x * (unitData.trackId + 0.5f), screenStep.y, 0));
         unitObj.transform.position = new Vector3(unitObj.transform.position.x, unitObj.transform.position.y, 0);
         tracks[unitData.trackId-1].actionUnits.Add(unit);
