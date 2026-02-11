@@ -43,7 +43,7 @@ public class HoldUnit : Unit
                 Destroy(material);
             }
             material.SetFloat("_HoldProgress", holdProgress);
-            
+            print(holdProgress);
         }
         else
             base.Update();
@@ -52,12 +52,14 @@ public class HoldUnit : Unit
     {
         isHold = true;
         //material.SetFloat("_EdgePower", 1);
+        hitPos = transform.position.y;
         Debug.Log($"按下{this}");
     }
     public override void HitUnitEnd(float time)
     {
         isHold = false;
         //material.SetFloat("_EdgePower", 0);
+        unitHitTime = time;
         Debug.Log($"松开了{this}");
     }
 }
