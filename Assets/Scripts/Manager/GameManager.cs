@@ -33,6 +33,11 @@ public class GameManager : MonoBehaviour
             musicGameUnitQueue.Enqueue(unitData);
         }
         source = GetComponent<AudioSource>();
+        if (source == null)
+        {
+            Debug.LogWarning($"{source}为空，已更新组件");
+            source = gameObject.AddComponent<AudioSource>();
+        }
         source.loop = false;
         source.enabled = false;
     }
