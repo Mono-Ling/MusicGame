@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ClickUnit : Unit
 {
@@ -10,12 +11,10 @@ public class ClickUnit : Unit
         shader = Shader.Find(shaderName);
         base.InitMaterial();
     }
-    public override void HitUnit(float time = 0)
+    public override void HitUnit(float time = 0, UnityAction callback = null)
     {
-        {
-            GameObject eff = Instantiate(Resources.Load<GameObject>("Effect/WaveEff"), transform.position, Quaternion.identity);
-            Destroy(eff, 0.5f); // 销毁特效
-            Destroy(gameObject);
-        }
+        GameObject eff = Instantiate(Resources.Load<GameObject>("Effect/WaveEff"), transform.position, Quaternion.identity);
+        Destroy(eff, 0.5f); // 销毁特效
+        callback?.Invoke();
     }
 }

@@ -107,6 +107,4 @@ MonoBehaviour:
   shader: {fileID: 0}
   startColor: {r: 0, g: 0.5342088, b: 1, a: 0}
   endColor: {r: 1, g: 0, b: 0.55660915, a: 0}
-  edgeStartColor: {r: 1, g: 0.847298, b: 0, a: 0}
-  edgeEndColor: {r: 1, g: 0.009433806, b: 0.009433806, a: 0}
-  edgeThreshold: 0.056
+  shaderAlpha: 0.5

@@ -5,14 +5,17 @@ Shader "Unlit/ClickUnit"
         _MainTex ("Texture", 2D) = "white" {}
         _StartColor("Start Color",Color) = (1,1,1,1)
         _EndColor("End Color",Color) = (1,1,1,1)
+        _Alpha("Alpha",Range(0,1)) = 1
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Transparent" "IgnoreProjector" = "True" "Queue" = "Transparent" }
         LOD 100
 
         Pass
         {
+            ZWrite Off
+            Blend SrcAlpha OneMinusSrcAlpha
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -36,6 +39,7 @@ Shader "Unlit/ClickUnit"
             float4 _MainTex_ST;
             fixed4 _StartColor;
             fixed4 _EndColor;
+            float _Alpha;
 
             v2f vert (appdata v)
             {
@@ -49,7 +53,7 @@ Shader "Unlit/ClickUnit"
             {
                 // sample the texture
                 fixed4 color = lerp(_StartColor,_EndColor,i.uv.y); //tex2D(_MainTex, i.uv);
-                return fixed4(color.rgb,1);
+                return fixed4(color.rgb,_Alpha);
             }
             ENDCG
         }

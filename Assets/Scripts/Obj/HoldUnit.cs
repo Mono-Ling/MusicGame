@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HoldUnit : Unit
 {
@@ -37,23 +38,19 @@ public class HoldUnit : Unit
             time = Mathf.InverseLerp(unitHitTime, unitHitTime + unitDuration, time);
             holdProgress = Mathf.SmoothStep(0,1 , time);
             holdProgress = 1 - holdProgress;
-            if (holdProgress <= 0)
-            {
-                Destroy(gameObject);
-                Destroy(material);
-            }
+            if (holdProgress <= 0) callback?.Invoke();
             material.SetFloat("_HoldProgress", holdProgress);
-            print(holdProgress);
         }
         else
             base.Update();
     }
-    public override void HitUnit(float time)
+    public override void HitUnit(float time,UnityAction callback = null)
     {
         isHold = true;
         //material.SetFloat("_EdgePower", 1);
         hitPos = transform.position.y;
         Debug.Log($"°´ÏÂ{this}");
+        this.callback = callback;
     }
     public override void HitUnitEnd(float time)
     {
