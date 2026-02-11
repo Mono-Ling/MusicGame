@@ -32,7 +32,7 @@ public abstract class Unit : MonoBehaviour
     public float unitDuration = 0;
     [Header("音符类型")]
     public UnitType type = UnitType.None;
-    public UnitState state {  get; private set; }
+    public UnitState state {  get; protected set; }
     [Header("着色器")]
     public Shader shader;
     [Header("颜色设置")]

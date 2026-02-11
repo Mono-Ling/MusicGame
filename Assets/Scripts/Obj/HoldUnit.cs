@@ -57,6 +57,7 @@ public class HoldUnit : Unit
         isHold = false;
         //material.SetFloat("_EdgePower", 0);
         unitHitTime = time;
+        state = UnitState.Miss;
         Debug.Log($"ки©╙ак{this}");
     }
 }
