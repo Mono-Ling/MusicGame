@@ -17,22 +17,22 @@ public class GameManager : MonoBehaviour
         _instance = this;
         //DontDestroyOnLoad(gameObject);
     }
-    public Queue<UnitData> musicGameUnitQueue = new Queue<UnitData>();
+    public Queue<UnitData> unitDataQueue = new Queue<UnitData>();
     public float time {  get; private set; }
     private bool musicPlaying = false;
-    private List<UnitData> musicGameUnitList = DataManager.Instance.unitDataList.unitList;
+    private List<UnitData> unitDataList = DataManager.Instance.unitDataList.unitList;
     private AudioSource source;
     // Start is called before the first frame update
     void Start()
     {
-        if(musicGameUnitList == null || musicGameUnitList.Count == 0)
+        if(unitDataList == null || unitDataList.Count == 0)
         {
             Debug.LogError("音游单位数据列表为空");
             return;
         }
-        foreach (var unitData in musicGameUnitList)
+        foreach (var unitData in unitDataList)
         {
-            musicGameUnitQueue.Enqueue(unitData);
+            unitDataQueue.Enqueue(unitData);
         }
         source = GetComponent<AudioSource>();
         if (source == null)
@@ -60,14 +60,14 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator UpdateMusicGameUnit()
     {
-        UnitData firstUnitData = musicGameUnitQueue.Peek();
+        UnitData firstUnitData = unitDataQueue.Peek();
         yield return new WaitForSeconds(firstUnitData.startTime);
-        while (musicGameUnitQueue.Count > 0)
+        while (unitDataQueue.Count > 0)
         {
-            UnitData unitData = musicGameUnitQueue.Dequeue();
-            UnitManager.Instance.CreatUnit(unitData);
-            if (musicGameUnitQueue.Count == 0) break;
-            float timeToNextUnit = musicGameUnitQueue.Peek().startTime - unitData.startTime;
+            UnitData unitData = unitDataQueue.Dequeue();
+            UnitManager.Instance.CreateUnit(unitData);
+            if (unitDataQueue.Count == 0) break;
+            float timeToNextUnit = unitDataQueue.Peek().startTime - unitData.startTime;
             yield return new WaitForSeconds(timeToNextUnit);
         }
         Debug.Log("协程结束");

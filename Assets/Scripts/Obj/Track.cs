@@ -8,6 +8,7 @@ public class Track : MonoBehaviour
 {
     public int id;
     public List<Unit> actionUnits = new List<Unit>();
+    public Unit holdingUnit = null;
     private BoxCollider2D boxCollider;
     private void Start()
     {
@@ -34,13 +35,13 @@ public class Track : MonoBehaviour
                 right = mid - 1;
                 continue;
             }
-            if (Mathf.Abs(time - midUnit.unitEndTime) < window)
+            if (Mathf.Abs(time - midUnit.unitHitTime) < window)
             {
                 targetIndex = mid;
                 targetUnit = midUnit;
                 break;
             }
-            else if (time - midUnit.unitEndTime > window)
+            else if (time - midUnit.unitHitTime > window)
             {
                 left = mid + 1;
             }

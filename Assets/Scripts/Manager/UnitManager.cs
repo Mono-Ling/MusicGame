@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class UnitManager : MonoBehaviour
 {
@@ -40,7 +41,7 @@ public class UnitManager : MonoBehaviour
             if (tracks[i].actionUnits.Count == 0)
                 continue;
             Unit unit = tracks[i].actionUnits[0];
-            if (unit == null || time - unit.unitEndTime > window)
+            if (unit == null || time - unit.unitHitTime > window)
             {
                 tracks[i].actionUnits.RemoveAt(0);
             }
@@ -59,13 +60,27 @@ public class UnitManager : MonoBehaviour
             if (hit != null && hit.CompareTag("Track"))
             {
                 Debug.Log("µã»÷ÁË¹ìµÀ");
-                int hitTrackIndex = hit.gameObject.GetComponent<Track>().id - 1;
-                Unit unit = tracks[hitTrackIndex].ComparInputUnit(time,window);
-                if (unit != null) unit.HitUnit();
+                Track track = hit.gameObject.GetComponent<Track>();
+                Unit unit = track.ComparInputUnit(time,window);
+                if (unit != null) unit.HitUnit(time);
+                if(unit != null&&unit.type == UnitType.Hold) track.holdingUnit = unit;
+            }
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
+            if (hit != null && hit.CompareTag("Track"))
+            {
+                Track track = hit.gameObject.GetComponent<Track>();
+                if(track.holdingUnit != null)
+                {
+                    track.holdingUnit.HitUnitEnd(time);
+                }
             }
         }
     }
-    public void CreatUnit(UnitData unitData)
+    public void CreateUnit(UnitData unitData)
     {
         GameObject unitPrefab = Resources.Load<GameObject>($"MusicGameUnit/{unitData.unitType}");
         GameObject unitObj = Instantiate(unitPrefab);
@@ -73,10 +88,16 @@ public class UnitManager : MonoBehaviour
         //unitObj.transform.position = new Vector3(unitData.trackId * 2 - 4, 6, 0);
         Unit unit = unitObj.GetComponent<Unit>();
         unit.scaleX = screenStep.x / 100f;
-        unit.unitEndTime = unitData.endTime;
+        unit.unitHitTime = unitData.hitTime;
         unit.unitStartTime = unitData.startTime;
+        unit.unitDuration = unitData.duration;
+        unit.type = GetUnitType(unitData.unitType);
         unitObj.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(screenStep.x * (unitData.trackId + 0.5f), screenStep.y, 0));
-        unitObj.transform.position = new Vector3(unitObj.transform.position.x, unitObj.transform.position.y + 0.5f, 0);
+        unitObj.transform.position = new Vector3(unitObj.transform.position.x, unitObj.transform.position.y, 0);
         tracks[unitData.trackId-1].actionUnits.Add(unit);
+    }
+    private UnitType GetUnitType(int unitType)
+    {
+        return (UnitType)unitType;
     }
 }

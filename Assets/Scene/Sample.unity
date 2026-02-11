@@ -169,6 +169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   actionUnits: []
+  holdingUnit: {fileID: 0}
 --- !u!61 &695042733
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -261,6 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   actionUnits: []
+  holdingUnit: {fileID: 0}
 --- !u!61 &717477061
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -663,6 +665,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 4
   actionUnits: []
+  holdingUnit: {fileID: 0}
 --- !u!61 &1727946403
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -755,6 +758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   actionUnits: []
+  holdingUnit: {fileID: 0}
 --- !u!61 &1812302827
 BoxCollider2D:
   m_ObjectHideFlags: 0
