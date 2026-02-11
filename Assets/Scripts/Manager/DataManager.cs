@@ -9,9 +9,10 @@ public class DataManager
     private static DataManager _instance;
     public static DataManager Instance => _instance ??= new DataManager();
     public MusicUnitList unitDataList;
+    const string unitDataPath = "/MusicUnit.json";
     private DataManager()
     {
-        unitDataList = LoadData<MusicUnitList>("/MusicUnit.json");
+        unitDataList = LoadData<MusicUnitList>(unitDataPath);
         if (unitDataList == null)
         {
             Debug.LogError("º”‘ÿ ß∞‹");

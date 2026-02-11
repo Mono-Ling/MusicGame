@@ -1,0 +1,56 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Check : MonoBehaviour
+{
+    private static Check _instance;
+    public static Check Instance => _instance;
+    private void Awake()
+    {
+        if(_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            Debug.LogWarning($"µ¥Àý{_instance}ÖØ¸´×¢²á");
+            return;
+        }
+        _instance = this;
+    }
+    public float height;
+    private BoxCollider2D boxCollider2D;
+    // Start is called before the first frame update
+    void Start()
+    {
+        Vector3 scale = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
+        transform.localScale = new Vector3(scale.x * 2, transform.localScale.y, transform.localScale.z);
+        boxCollider2D = GetComponent<BoxCollider2D>();
+        if (boxCollider2D == null)
+        {
+            Debug.LogWarning("È±ÉÙÅö×²ºÐ");
+            boxCollider2D = gameObject.AddComponent<BoxCollider2D>();
+        }
+        boxCollider2D.size = new Vector2(1, height);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("InvalidMusicUnit"))
+        {
+            collision.gameObject.tag = "MusicUnit";
+            Debug.Log("½øÈë¼ì²âÇøÓò");
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("MusicUnit"))
+        {
+            collision.gameObject.tag = "InvalidMusicUnit";
+            Debug.Log("Àë¿ª¼ì²âÇøÓò");
+        }
+    }
+}

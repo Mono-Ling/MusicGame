@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     {
         if(musicGameUnitList == null || musicGameUnitList.Count == 0)
         {
-            Debug.LogError("音乐游戏单位数据列表为空");
+            Debug.LogError("音游单位数据列表为空");
             return;
         }
         foreach (var unitData in musicGameUnitList)
@@ -43,7 +43,9 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator UpdateMusicGameUnit()
     {
-        while(musicGameUnitQueue.Count > 0)
+        UnitData firstUnitData = musicGameUnitQueue.Peek();
+        yield return new WaitForSeconds(firstUnitData.time);
+        while (musicGameUnitQueue.Count > 0)
         {
             UnitData unitData = musicGameUnitQueue.Dequeue();
             CreatUnit(unitData);
@@ -57,6 +59,13 @@ public class GameManager : MonoBehaviour
     {
         GameObject unitPrefab = Resources.Load<GameObject>($"MusicGameUnit/{unitData.unitType}");
         GameObject unitObj = Instantiate(unitPrefab);
-        unitObj.transform.position = new Vector3(unitData.trackId * 2 - 4, 6, 0);
+        Vector2 screenStep = new Vector2(Screen.width / 6f, Screen.height);
+        //unitObj.transform.position = new Vector3(unitData.trackId * 2 - 4, 6, 0);
+        Unit unit = unitObj.GetComponent<Unit>();
+        unit.scaleX = screenStep.x/100f;
+        unit.hitTime = unitData.hitTime;
+        unit.time = unitData.time;
+        unitObj.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(screenStep.x *(unitData.trackId+0.5f), screenStep.y, 0));
+        unitObj.transform.position = new Vector3(unitObj.transform.position.x, unitObj.transform.position.y+0.5f, 0);
     }
 }
