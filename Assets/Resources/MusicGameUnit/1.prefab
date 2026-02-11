@@ -101,8 +101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   scaleX: 1
-  time: 0
-  hitTime: 0
+  unitStartTime: 0
+  unitEndTime: 0
 --- !u!50 &6799148283573258288
 Rigidbody2D:
   serializedVersion: 4
@@ -164,4 +164,4 @@ CapsuleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 1}
-  m_Direction: 0
+  m_Direction: 1

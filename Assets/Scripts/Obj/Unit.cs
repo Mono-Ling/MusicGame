@@ -22,7 +22,7 @@ public class Unit : MonoBehaviour
             capsuleCollider = gameObject.AddComponent<CapsuleCollider2D>();
         }
         capsuleCollider.enabled = true;
-        capsuleCollider.size = new Vector2(scaleX + 0.5f, 1);
+        capsuleCollider.size = new Vector2(scaleX , 1);
         transform.localScale = new Vector3(scaleX, 1, 1);
         startTime = Time.time;
         startPos = transform.position.y;
