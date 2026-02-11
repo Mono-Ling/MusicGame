@@ -6,8 +6,8 @@ public class Unit : MonoBehaviour
 {
     public float speed = 5f;
     public float scaleX = 1;
-    public float time = 0;
-    public float hitTime = 0;
+    public float unitStartTime = 0;
+    public float unitEndTime = 0;
     private CapsuleCollider2D capsuleCollider;
     private float startTime;
     private float startPos;
@@ -32,7 +32,7 @@ public class Unit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float t = (Time.time - startTime) / (hitTime - time);
+        float t = (Time.time - startTime) / (unitEndTime - unitStartTime);
         if( t >= 1 )
             transform.Translate(Vector3.down * Time.deltaTime * speed);
         else

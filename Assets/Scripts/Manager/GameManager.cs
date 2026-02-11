@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     }
     public Queue<UnitData> musicGameUnitQueue = new Queue<UnitData>();
     private List<UnitData> musicGameUnitList = DataManager.Instance.unitDataList.unitList;
+    private AudioSource source;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +32,9 @@ public class GameManager : MonoBehaviour
         {
             musicGameUnitQueue.Enqueue(unitData);
         }
+        source = GetComponent<AudioSource>();
+        source.loop = false;
+        source.enabled = false;
     }
 
     // Update is called once per frame
@@ -39,18 +43,19 @@ public class GameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(UpdateMusicGameUnit());
+            source.enabled = true;
         }
     }
     IEnumerator UpdateMusicGameUnit()
     {
         UnitData firstUnitData = musicGameUnitQueue.Peek();
-        yield return new WaitForSeconds(firstUnitData.time);
+        yield return new WaitForSeconds(firstUnitData.startTime);
         while (musicGameUnitQueue.Count > 0)
         {
             UnitData unitData = musicGameUnitQueue.Dequeue();
             CreatUnit(unitData);
             if (musicGameUnitQueue.Count == 0) break;
-            float timeToNextUnit = musicGameUnitQueue.Peek().time - unitData.time;
+            float timeToNextUnit = musicGameUnitQueue.Peek().startTime - unitData.startTime;
             yield return new WaitForSeconds(timeToNextUnit);
         }
         Debug.Log("Ð­³Ì½áÊø");
@@ -63,8 +68,8 @@ public class GameManager : MonoBehaviour
         //unitObj.transform.position = new Vector3(unitData.trackId * 2 - 4, 6, 0);
         Unit unit = unitObj.GetComponent<Unit>();
         unit.scaleX = screenStep.x/100f;
-        unit.hitTime = unitData.hitTime;
-        unit.time = unitData.time;
+        unit.unitEndTime = unitData.endTime;
+        unit.unitStartTime = unitData.startTime;
         unitObj.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(screenStep.x *(unitData.trackId+0.5f), screenStep.y, 0));
         unitObj.transform.position = new Vector3(unitObj.transform.position.x, unitObj.transform.position.y+0.5f, 0);
     }
