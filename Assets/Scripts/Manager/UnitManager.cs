@@ -61,8 +61,8 @@ public class UnitManager : MonoBehaviour
             Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
             if (hit != null && hit.CompareTag("Track"))
             {
-                Debug.Log("点击了轨道");
                 Track track = hit.gameObject.GetComponent<Track>();
+                Debug.Log($"点击了轨道{track.id}");
                 Unit unit = track.ComparInputUnit(time,window);
                 if (unit != null) unit.HitUnit(time, () => { unit.DestoryUnit(); });
                 if(unit != null&&unit.type == UnitType.Hold) track.holdingUnit = unit;

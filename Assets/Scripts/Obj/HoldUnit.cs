@@ -9,6 +9,9 @@ public class HoldUnit : Unit
     //public Color edgeEndColor;
     //[Range(0f, 1f)]
     //public float edgeThreshold;
+    [Header("松开时触发回调的阈值")]
+    [Range(0f, 1f)]
+    public float clipThreshold = 0.01f;
     private bool isHold;
     private float holdProgress;
     private const string shaderName = "Unlit/HoldUnit";
@@ -58,6 +61,7 @@ public class HoldUnit : Unit
         //material.SetFloat("_EdgePower", 0);
         unitHitTime = time;
         state = UnitState.Miss;
+        if(holdProgress < clipThreshold) callback?.Invoke();
         Debug.Log($"松开了{this}");
     }
 }

@@ -107,4 +107,5 @@ MonoBehaviour:
   shader: {fileID: 0}
   startColor: {r: 0, g: 0.5342088, b: 1, a: 0}
   endColor: {r: 1, g: 0, b: 0.55660915, a: 0}
-  shaderAlpha: 0.5
+  missShaderAlpha: 0.5
+  clipThreshold: 0.01
