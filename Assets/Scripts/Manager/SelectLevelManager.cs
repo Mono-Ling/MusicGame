@@ -33,6 +33,7 @@ public class SelectLevelManager
         }
         levelIndex = index;
         unitList = null;
+        effectList = null;
         audio = null;
         coverSprite = null;
         description = null;
