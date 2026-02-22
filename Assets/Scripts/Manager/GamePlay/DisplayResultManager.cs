@@ -105,4 +105,17 @@ public class DisplayResultManager : MonoBehaviour
         }
         UIManager.Instance.DontBufferHideUI(text);
     }
+    public void Clear()
+    {
+        if (textList == null) return;
+        for (int i = 0; i < textList.Count; i++)
+        {
+            UIManager.Instance.DontBufferHideUI(textList[i]);
+        }
+        textList.Clear();
+    }
+    private void OnDestroy()
+    {
+        Clear();
+    }
 }
