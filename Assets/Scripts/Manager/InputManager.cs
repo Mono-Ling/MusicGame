@@ -86,6 +86,7 @@ public class InputManager : MonoBehaviour
     }
     public void StartInput()
     {
+        if (gamePanel != null) StopInput(false);
         UIManager.Instance.ShowUI<GamePanel>();
         gamePanel = UIManager.Instance.GetUI<GamePanel>();
         gamePanel.InputDown += ScreenInputDown;
@@ -98,9 +99,9 @@ public class InputManager : MonoBehaviour
         StartGame += () => { EventBus.Instance.TriggerEvent(EventType.StartGame); };
         isRunning = true;
     }
-    public void StopInput()
+    public void StopInput(bool isAnimation = true)
     {
-        UIManager.Instance.HideUI<GamePanel>();
+        UIManager.Instance.HideUI<GamePanel>(null,isAnimation);
         StartGame = null;
         isRunning = false;
     }
@@ -134,7 +135,7 @@ public class InputManager : MonoBehaviour
     }
     private void KeyInput()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)) EventBus.Instance.TriggerEvent(EventType.PauseGame);
+        //if(Input.GetKeyDown(KeyCode.Escape)) EventBus.Instance.TriggerEvent(EventType.PauseGame);
         foreach (var item in keyInputDic)
         {
             KeyInputUnit(item.Key, item.Value);

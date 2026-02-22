@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         //InputManager.Instance.PauseGame += () => PauseGame();
 
         EventBus.Instance.AddListener(EventType.StartGame, StartGame);
-        EventBus.Instance.AddListener(EventType.PauseGame, PauseGame);
+        
 
         InputManager.Instance.StartInput();
 
@@ -130,11 +130,13 @@ public class GameManager : MonoBehaviour
         if (keyframeDataQueue != null && keyframeDataQueue.Count > 0)
             StartCoroutine(UpdateMoveTime());
         else Debug.LogWarning($"{this}音符移动速度插值协程初始化异常");
+        EventBus.Instance.AddListener(EventType.PauseGame, PauseGame);
         EventBus.Instance.RemoveListener(EventType.StartGame,StartGame);
     }
     private void PauseGame()
     {
         GameTimeManager.Instance.PauseGame(isPlaying);
+        UIManager.Instance.ShowUI<PausePanel>();
         isPlaying = !isPlaying;
         print("暂停");
     }

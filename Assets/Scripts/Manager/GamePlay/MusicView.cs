@@ -23,9 +23,11 @@ public class MusicView : MonoBehaviour
     public float max = 0.1f;
     public Material material;
     public bool isNormalize = true;
+    public int updateInterval = 5;
     private Camera mainCamera;
     private Color lowColor;
     private Color highColor;
+    private int frameCount = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +43,7 @@ public class MusicView : MonoBehaviour
         highColor = new Color(color.r, color.g, color.b, color.a);
         material.SetColor("_Color", lowColor);
         material.SetColor ("_MaxColor", highColor);
+        spectrumData = new float[spectrumSize];
     }
 
     // Update is called once per frame
@@ -48,7 +51,13 @@ public class MusicView : MonoBehaviour
     {
         if (audioSource == null) audioSource = AudioManager.Instance.musicSource;
         if (audioSource == null) return;
-        CalculateFrequencyBands();
+
+        if(frameCount++ > updateInterval)
+        {
+            CalculateFrequencyBands();
+            frameCount = 0;
+        }
+        
         SmoothBands();
         NormalizedZero2One();
 
@@ -62,7 +71,7 @@ public class MusicView : MonoBehaviour
     }
     void CalculateFrequencyBands()
     {
-        spectrumData = new float[spectrumSize];
+        //spectrumData = new float[spectrumSize];
         audioSource.GetSpectrumData(spectrumData, 0, window);
         System.Array.Clear(frequencyBands, 0, frequencyBands.Length);
         // 3. 将频谱数据映射到8个频段
