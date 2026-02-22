@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class DataManager
 {
@@ -26,9 +27,69 @@ public class DataManager
     }
     private T LoadData<T>(string path)
     {
-        string filePath = Path.Combine(Application.streamingAssetsPath, path);
-        string json = File.ReadAllText(filePath);
-        return JsonMapper.ToObject<T>(json);
+        string jsonContent = null;
+        string filePath = GetStreamingAssetsPath(path);
+
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            // 阻塞式读取（不推荐，可能卡顿）
+            UnityWebRequest www = UnityWebRequest.Get(filePath);
+            www.SendWebRequest();
+
+            // 等待请求完成
+            while (!www.isDone)
+            {
+                // 空循环等待
+            }
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"加载文件失败: {filePath} | 错误: {www.error}");
+                www.Dispose();
+                return default(T);
+            }
+
+            jsonContent = www.downloadHandler.text;
+            www.Dispose();
+        }
+        else
+        {
+            if (!File.Exists(filePath))
+            {
+                Debug.LogError($"文件不存在: {filePath}");
+                return default(T);
+            }
+            jsonContent = File.ReadAllText(filePath);
+        }
+
+        try
+        {
+            return JsonMapper.ToObject<T>(jsonContent);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"JSON解析失败: {path} | 错误: {e.Message}");
+            return default(T);
+        }
+    }
+
+    // 获取跨平台路径方法（同方案1）
+    private string GetStreamingAssetsPath(string fileName)
+    {
+        string path = "";
+        switch (Application.platform)
+        {
+            case RuntimePlatform.Android:
+                path = $"jar:file://{Application.dataPath}!/assets/{fileName}";
+                break;
+            case RuntimePlatform.IPhonePlayer:
+                path = $"{Application.dataPath}/Raw/{fileName}";
+                break;
+            default:
+                path = Path.Combine(Application.streamingAssetsPath, fileName);
+                break;
+        }
+        return path;
     }
     public List<UnitData> GetUnitList(LevelData levelData)
     {

@@ -537,7 +537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed25b7c23c8018c48bb470ceadfe305f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTime: 2
+  moveTime: 1.5
   levelIndex: 1
 --- !u!4 &1300233706
 Transform:
