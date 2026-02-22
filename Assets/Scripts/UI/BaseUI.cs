@@ -12,10 +12,14 @@ public abstract class BaseUI : MonoBehaviour
     protected UnityAction showCallback;
     protected UnityAction hideCallback;
     protected bool isShow;
+    private void Awake()
+    {
+        canvasGroup = GetComponent<CanvasGroup>();
+    }
     // Start is called before the first frame update
     void Start()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
+        //canvasGroup = GetComponent<CanvasGroup>();
         InitUI();
     }
     protected abstract void InitUI();
