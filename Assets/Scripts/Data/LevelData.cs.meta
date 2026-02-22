@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/Data/LevelData.cs.meta
 guid: 1119bf224b5ce4445b1f809c238b6a1d
+========
+guid: 0e954d9ad898dae4e87622eb44a6d576
+>>>>>>>> 完善计时系统（游戏时间/协程延时），基于dspTime:Assets/Scripts/Manager/DataManager.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
