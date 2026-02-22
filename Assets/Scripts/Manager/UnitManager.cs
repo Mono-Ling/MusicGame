@@ -91,7 +91,7 @@ public class UnitManager : MonoBehaviour
         unit.unitDuration = unitData.duration;
         unit.type = Unit.GetUnitType(unitData.unitType);
         unitObj.transform.position = mainCamera.ScreenToWorldPoint(new Vector3(screenStep.x * (unitData.trackId + 0.5f), screenStep.y, 0));
-        unitObj.transform.position = new Vector3(unitObj.transform.position.x, unitObj.transform.position.y, 0);
+        unitObj.transform.position = new Vector3(unitObj.transform.position.x, unitObj.transform.position.y + 0.5f, 0);
         tracks[unitData.trackId-1].actionUnits.Add(unit);
     }
 }

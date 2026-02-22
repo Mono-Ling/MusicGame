@@ -21,7 +21,8 @@ public class HoldUnit : Unit
         float far = startPos - hitPos;
         //float moveTime = unitHitTime - unitStartTime;
         float step = far / moveTime;
-        scaleY = step * unitDuration;
+        float height = step * unitDuration;
+        scaleY = height / spriteRenderer.bounds.size.y;
         transform.localScale = new Vector3(scaleX, scaleY, 1);
     }
     protected override void InitMaterial()
