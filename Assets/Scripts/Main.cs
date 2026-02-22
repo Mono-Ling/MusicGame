@@ -28,14 +28,23 @@ public class Main : MonoBehaviour
     }
     private void Init()
     {
-        if (SelectLevelManager.Instance.CheckLevelData()) UIManager.Instance.ShowUI<SelectLevelPanel>();
-        else
+        try
+        {
+            if (SelectLevelManager.Instance.CheckLevelData()) UIManager.Instance.ShowUI<SelectLevelPanel>();
+            else
+            {
+                UIManager.Instance.ShowUI<WarningPanel>();
+                var warning = UIManager.Instance.GetUI<WarningPanel>();
+                warning.errorData = "游戏初始化错误";
+            }
+            StateManager.Instance.GameStart();
+            Debug.Log("初始化");
+        }
+        catch
         {
             UIManager.Instance.ShowUI<WarningPanel>();
             var warning = UIManager.Instance.GetUI<WarningPanel>();
-            warning.errorData = "游戏初始化错误";
+            warning.errorData = "错误";
         }
-        StateManager.Instance.GameStart();
-        Debug.Log("初始化");
     }
 }
