@@ -50,7 +50,7 @@ public class SettingManager
     public void SetMusicVolume(float volume)
     {
         settingData.musicVolume = volume;
-        AudioManager.Instance.SetMusicVolume(volume);
+        if(AudioManager.Instance != null) AudioManager.Instance.SetMusicVolume(volume);
         Save();
     }
     public void StartSetting()

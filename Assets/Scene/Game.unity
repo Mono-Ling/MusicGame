@@ -631,8 +631,8 @@ GameObject:
   - component: {fileID: 1300233708}
   - component: {fileID: 1300233711}
   - component: {fileID: 1300233712}
+  - component: {fileID: 1300233714}
   - component: {fileID: 1300233709}
-  - component: {fileID: 1300233713}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -806,7 +806,7 @@ MonoBehaviour:
   greatWindow: 0
   goodWindow: 0
   fastScale: 0.4
---- !u!114 &1300233713
+--- !u!114 &1300233714
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -815,26 +815,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1300233704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11c82b3055249f04e948ba59a4a15110, type: 3}
+  m_Script: {fileID: 11500000, guid: a01f9bab8d47b10488327132ddc18fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
-  spectrumSize: 1024
-  window: 4
-  smoothSpeed: 10
-  normalizedBands:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  min: 0
-  max: 0.1
-  material: {fileID: 2100000, guid: b48192edfd9587b42aa5a59f0204c64e, type: 2}
-  isNormalize: 1
 --- !u!1 &1727946400
 GameObject:
   m_ObjectHideFlags: 0
