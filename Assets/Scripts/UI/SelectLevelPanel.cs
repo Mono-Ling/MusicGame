@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class SelectLevelPanel : BaseUI
 {
     public float half {  get; private set; }
-    public float edgeHeight;
+    //public float edgeHeight;
     public float itemHeight;
     public RectTransform rectTransform;
     public LayoutElement layoutElement;
@@ -25,7 +25,7 @@ public class SelectLevelPanel : BaseUI
         List<LevelData> datas = SelectLevelManager.Instance.levels.levelList;
         if (layoutElement != null)
         {
-            float height = Screen.height / edgeHeight;
+            float height = 175; //Screen.height / edgeHeight;
             layoutElement.minHeight = height * datas.Count + height * 2;
         }
         foreach (LevelData data in datas)
