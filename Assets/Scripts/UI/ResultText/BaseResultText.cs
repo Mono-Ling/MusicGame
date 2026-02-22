@@ -19,6 +19,18 @@ public abstract class BaseResultText : BaseUI,IPoolItem
 
     public ExtendType extendType { get; set; } = ExtendType.Reuse;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        EventBus.Instance.AddListener(EventType.EndGame, ForcedRecycle);
+    }
+    protected virtual void ForcedRecycle()
+    {
+        hideCallback = null;
+        showCallback = null;
+        UIManager.Instance.DontBufferHideUI(this,null,false);
+        Debug.LogWarning("强制回收");
+    }
     public void Init()
     {
         showTime = maxShowTime;
@@ -73,6 +85,7 @@ public abstract class BaseResultText : BaseUI,IPoolItem
     private void OnDestroy()
     {
         hideCallback = null;
+        EventBus.Instance.RemoveListener(EventType.EndGame, ForcedRecycle);
     }
     public virtual void Fast(float scale)
     {

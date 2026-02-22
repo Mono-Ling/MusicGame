@@ -44,4 +44,9 @@ public enum EventType
     /// ResultType参数
     /// </summary>
     Update_InputResult,
+
+    /// <summary>
+    /// 无参
+    /// </summary>
+    EndGame,
 }
