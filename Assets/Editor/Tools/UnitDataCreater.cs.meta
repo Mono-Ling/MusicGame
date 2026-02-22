@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/Data/LevelData.cs.meta
+guid: e8c400b2646ecac4e88149afcc772d46
+========
+guid: 2f4c88750a71c274c8a861df2fd2fd1d
+>>>>>>>> 添加音符配置文件生成/修改工具:Assets/Editor/Tools/UnitDataCreater.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
