@@ -24,11 +24,12 @@ public class GameManager : MonoBehaviour
     public int levelIndex;
     private bool isPlaying = false;
     private List<UnitData> unitDataList;
-    private AudioSource source;
+    private AudioSource source { get; set; }
     private float time;
     private List<KeyframeData> keyframeDatas;
     private Queue<KeyframeData> keyframeDataQueue = new Queue<KeyframeData>();
     private float maxMoveTime = 2;
+    private AudioClip audioClip;
     //private UnityAction StartGame;
     // Start is called before the first frame update
     void Start()
@@ -46,15 +47,16 @@ public class GameManager : MonoBehaviour
         {
             unitDataQueue.Enqueue(unitData);
         }
-        source = GetComponent<AudioSource>();
-        if (source == null)
-        {
-            Debug.LogWarning($"{source}为空，已更新组件");
-            source = gameObject.AddComponent<AudioSource>();
-        }
-        source.clip = SelectLevelManager.Instance.GetLevelMusicClip();
-        source.loop = false;
-        source.Stop();
+        //source = GetComponent<AudioSource>();
+        //if (source == null)
+        //{
+        //    Debug.LogWarning($"{source}为空，已更新组件");
+        //    source = gameObject.AddComponent<AudioSource>();
+        //}
+        audioClip = SelectLevelManager.Instance.GetLevelMusicClip();
+        AudioManager.Instance.SetMusic(audioClip);
+        //source.loop = false;
+        //source.Stop();
         GameTimeManager.Instance.SetStartTime();
         GameTimeManager.Instance.PauseGame(true);
         StartCoroutine(GameProgress());
@@ -121,7 +123,8 @@ public class GameManager : MonoBehaviour
     private void StartGamePlay()
     {
         StartCoroutine(UpdateMusicGameUnit());
-        source.Play();
+        //source.Play();
+        AudioManager.Instance.PlayMusic();
         GameTimeManager.Instance.PauseGame(false);
         isPlaying = true;
         if (keyframeDataQueue != null && keyframeDataQueue.Count > 0)

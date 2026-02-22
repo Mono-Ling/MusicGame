@@ -31,21 +31,22 @@ public class InputManager : MonoBehaviour
     }
     private UnityAction StartGame;
     //public event UnityAction PauseGame;
-    private Dictionary<EventType, KeyCode> keyInputDic;
+    public Dictionary<EventType, KeyCode> keyInputDic {  get; private set; }
     private GamePanel gamePanel;
     private bool isRunning = false;
-    private bool isCheckInput = false;
+    public bool isCheckInput { get; private set; } = false;
     private UnityAction<KeyCode> checkCallback;
     // Start is called before the first frame update
     void Start()
     {
-        keyInputDic = SettingManager.Instance.keySettingDic;
+        keyInputDic = SettingManager.Instance.settingData.keySetting;
         if(keyInputDic != null && keyInputDic.Count > 0) return;
         keyInputDic = new Dictionary<EventType, KeyCode>();
         SetKeyInput(EventType.Track_1, KeyCode.A);
         SetKeyInput(EventType.Track_2, KeyCode.S);
         SetKeyInput(EventType.Track_3, KeyCode.K);
         SetKeyInput(EventType.Track_4, KeyCode.L);
+        Debug.LogError("键位设置数据失效，已应用默认键位");
     }
 
     // Update is called once per frame
@@ -105,6 +106,7 @@ public class InputManager : MonoBehaviour
     }
     public void StartCheck(UnityAction<KeyCode> action)
     {
+        StopInput();
         checkCallback = action;
         StartCoroutine(CheckDelay());
     }
@@ -132,7 +134,8 @@ public class InputManager : MonoBehaviour
     }
     private void KeyInput()
     {
-        foreach(var item in keyInputDic)
+        if(Input.GetKeyDown(KeyCode.Escape)) EventBus.Instance.TriggerEvent(EventType.PauseGame);
+        foreach (var item in keyInputDic)
         {
             KeyInputUnit(item.Key, item.Value);
         }

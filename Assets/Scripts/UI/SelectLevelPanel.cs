@@ -46,7 +46,14 @@ public class SelectLevelPanel : BaseUI
             Debug.LogError("ÍË³ö°´Å¥Îª¿Õ£¡");
             return;
         }
-        butQuite.onClick.AddListener(() => { Application.Quit(); });
+        butQuite.onClick.AddListener(() => 
+        {
+            //Application.Quit();
+            UIManager.Instance.HideUI<SelectLevelPanel>(() =>
+            {
+                SettingManager.Instance.StartSetting();
+            });
+        });
     }
     protected override void Update()
     {

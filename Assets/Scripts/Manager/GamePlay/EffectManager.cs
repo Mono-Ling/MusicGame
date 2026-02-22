@@ -30,7 +30,7 @@ public class EffectManager : MonoBehaviour
             enabled = false;
             return;
         }
-        if (!SettingManager.Instance.isUseBloom)
+        if (!SettingManager.Instance.settingData.isUseBloom)
         {
             bloom.enabled = false;
             enabled = false;
