@@ -25,8 +25,8 @@ public class SelectLevelPanel : BaseUI
         List<LevelData> datas = SelectLevelManager.Instance.levels.levelList;
         if (layoutElement != null)
         {
-            float height = 175; //Screen.height / edgeHeight;
-            layoutElement.minHeight = height * datas.Count + height * 2;
+            float height = 260; //Screen.height / edgeHeight;
+            layoutElement.minHeight = 140 * datas.Count + height * 2;
         }
         foreach (LevelData data in datas)
         {

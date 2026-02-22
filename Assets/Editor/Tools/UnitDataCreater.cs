@@ -16,6 +16,7 @@ public class UnitDataCreater : EditorWindow
     private List<UnitData> unitDatas;
     private Type type;
     private int removeIndex = 0;
+    private int addIndex = 0;
     private Vector2 scrolPos;
     private string path;
     [MenuItem("工具/音符配置文件")]
@@ -45,8 +46,17 @@ public class UnitDataCreater : EditorWindow
     private void Tool()
     {
         EditorGUILayout.BeginHorizontal();
+        addIndex = EditorGUILayout.IntField("添加索引", addIndex);
         if (GUILayout.Button("添加"))
-            unitDatas.Add(new UnitData());
+        {
+            if(addIndex >= unitDatas.Count - 1)
+                unitDatas.Add(new UnitData());
+            else if(addIndex >= 0)
+                unitDatas.Insert(addIndex, new UnitData());
+            else
+                unitDatas.Insert(0,new UnitData());
+            addIndex = unitDatas.Count - 1;
+        }
         EditorGUILayout.Space();
         removeIndex = EditorGUILayout.IntField("移除索引", removeIndex);
         if (removeIndex < unitDatas.Count && removeIndex >= 0 && GUILayout.Button("移除"))
