@@ -90,8 +90,8 @@ public abstract class Unit : MonoBehaviour
     protected virtual void Update()
     {
         moveTime = GameManager.Instance.moveTime;
-        float beforeCheckTime = ((float)GameManager.Instance.time - unitStartTime) / (unitHitTime - unitStartTime);
-        float afterCheckTime = ((float)GameManager.Instance.time - unitHitTime) / (endTime - unitHitTime);
+        float beforeCheckTime = ((float)GameManager.Instance.currentTime - unitStartTime) / (unitHitTime - unitStartTime);
+        float afterCheckTime = ((float)GameManager.Instance.currentTime - unitHitTime) / (endTime - unitHitTime);
         if( beforeCheckTime >= 1 )
             transform.position = new Vector3(transform.position.x, Mathf.Lerp(hitPos, endPos, afterCheckTime), transform.position.z);
         //transform.Translate(Vector3.down * Time.deltaTime * speed);

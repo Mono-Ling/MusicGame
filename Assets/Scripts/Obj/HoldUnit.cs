@@ -37,7 +37,7 @@ public class HoldUnit : Unit
     {
         if (isHold)
         {
-            float time = (float)GameManager.Instance.time;
+            float time = (float)GameManager.Instance.currentTime;
             time = Mathf.InverseLerp(unitHitTime, unitHitTime + unitDuration, time);
             holdProgress = Mathf.SmoothStep(0,1 , time);
             holdProgress = 1 - holdProgress;

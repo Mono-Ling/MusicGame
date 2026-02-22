@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,15 +20,18 @@ public class GameManager : MonoBehaviour
     }
     public Queue<UnitData> unitDataQueue = new Queue<UnitData>();
     public float moveTime = 2;
-    public double time {  get; private set; }
+    public double currentTime {  get; private set; }
     public int levelIndex;
-    private bool musicPlaying = false;
+    private bool isPlaying = false;
     private List<UnitData> unitDataList;
     private AudioSource source;
+    private float time;
+    //private UnityAction StartGame;
     // Start is called before the first frame update
     void Start()
     {
         unitDataList = SelectLevelManager.Instance.GetLevelUnitDatas();
+        time = SelectLevelManager.Instance.GetTime();
         if(unitDataList == null || unitDataList.Count == 0)
         {
             Debug.LogError("音游单位数据列表为空");
@@ -46,28 +50,18 @@ public class GameManager : MonoBehaviour
         source.clip = SelectLevelManager.Instance.GetLevelMusicClip();
         source.loop = false;
         source.Stop();
+        GameTimeManager.Instance.SetStartTime();
         GameTimeManager.Instance.PauseGame(true);
+        StartCoroutine(GameProgress());
+        UIManager.Instance.ShowUI<InitGame>();
+        InputManager.Instance.StartGame += ()=> UIManager.Instance.HideUI<InitGame>(StartGame);
+        InputManager.Instance.PauseGame += () => PauseGame();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(UpdateMusicGameUnit());
-            source.Play();
-            GameTimeManager.Instance.PauseGame(false);
-            musicPlaying = true;
-        }
-        //time = (float)GameTimeManager.Instance.GetGameTime();
-        if (musicPlaying)
-            time = GameTimeManager.Instance.GetGameTime();
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            GameTimeManager.Instance.PauseGame(musicPlaying);
-            musicPlaying = !musicPlaying;
-            print("暂停");
-        }
+        currentTime = GameTimeManager.Instance.GetGameTime();
     }
     IEnumerator UpdateMusicGameUnit()
     {
@@ -82,9 +76,30 @@ public class GameManager : MonoBehaviour
             if (unitDataQueue.Count == 0) break;
             UnitData nextUnit = unitDataQueue.Peek();
             nextUnit.SetStartTime(moveTime);
-            float timeToNextUnit = nextUnit.startTime - (float)time;
+            float timeToNextUnit = nextUnit.startTime - (float)currentTime;
             yield return new WaitForDSPTime(timeToNextUnit);
         }
         Debug.Log("协程结束");
+    }
+    IEnumerator GameProgress()
+    {
+        while(currentTime<time)
+        {
+            yield return null;
+        }
+        UIManager.Instance.ShowUI<EndGame>();
+    }
+    private void StartGame()
+    {
+        StartCoroutine(UpdateMusicGameUnit());
+        source.Play();
+        GameTimeManager.Instance.PauseGame(false);
+        isPlaying = true;
+    }
+    private void PauseGame()
+    {
+        GameTimeManager.Instance.PauseGame(isPlaying);
+        isPlaying = !isPlaying;
+        print("暂停");
     }
 }

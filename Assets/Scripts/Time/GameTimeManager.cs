@@ -10,6 +10,10 @@ public class GameTimeManager
     private double gameTime;
     private GameTimeManager() 
     {
+        SetStartTime();
+    }
+    public void SetStartTime()
+    {
         startTime = AudioSettings.dspTime;
     }
     public double GetGameTime()

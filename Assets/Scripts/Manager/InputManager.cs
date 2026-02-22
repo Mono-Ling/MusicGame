@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InputManager : MonoBehaviour
 {
@@ -15,9 +16,17 @@ public class InputManager : MonoBehaviour
             return;
         }
         _instance = this;
-        DontDestroyOnLoad(gameObject);
     }
-    public Material hitMaterial; // 用于点击音符时的材质
+    public event UnityAction StartGame;
+    public event UnityAction PauseGame;
+    public event UnityAction TrackDown_1;
+    public event UnityAction TrackUp_1;
+    public event UnityAction TrackDown_2;
+    public event UnityAction TrackUp_2;
+    public event UnityAction TrackDown_3;
+    public event UnityAction TrackUp_3;
+    public event UnityAction TrackDown_4;
+    public event UnityAction TrackUp_4;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,19 +36,39 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.anyKeyDown && StartGame != null)
         {
-            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
-            if (hit != null && hit.CompareTag("MusicUnit"))
-            {
-                Debug.Log("点击了音符");
-                ScoreManager.Instance.AddScore(10); // 增加分数
-                Unit unit = hit.gameObject.GetComponent<Unit>();
-                Destroy(hit.gameObject);
-                GameObject eff = Instantiate(Resources.Load<GameObject>("Effect/WaveEff"), hit.transform.position, Quaternion.identity);
-                Destroy(eff, 0.5f); // 销毁特效
-            }
+            StartGame += () => { StartGame = null; };
+            StartGame?.Invoke();
         }
+        if(Input.GetKeyDown(KeyCode.Escape)) PauseGame?.Invoke();
+        CompareInput();
+    }
+    private void CompareInput()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+            TrackDown_1?.Invoke();
+        if (Input.GetKeyUp(KeyCode.A))
+            TrackUp_1?.Invoke();
+
+        if (Input.GetKeyDown(KeyCode.S))
+            TrackDown_2?.Invoke();
+        if (Input.GetKeyUp(KeyCode.S))
+            TrackUp_2?.Invoke();
+
+        if (Input.GetKeyDown(KeyCode.K))
+            TrackDown_3?.Invoke();
+        if (Input.GetKeyUp(KeyCode.K))
+            TrackUp_3?.Invoke();
+
+        if (Input.GetKeyDown(KeyCode.L))
+            TrackDown_4?.Invoke();
+        if (Input.GetKeyUp(KeyCode.L))
+            TrackUp_4?.Invoke();
+    }
+    private void OnDestroy()
+    {
+        StartGame = null;
+        PauseGame = null;
     }
 }

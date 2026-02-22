@@ -69,6 +69,10 @@ public class SelectLevelManager
         description = levels.levelList[levelIndex].description;
         return description;
     }
+    public float GetTime()
+    {
+        return levels.levelList[levelIndex].time;
+    }
     private void ClearSelectBuffer()
     {
         coverSprite = null;

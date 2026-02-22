@@ -19,18 +19,28 @@ public class UnitManager : MonoBehaviour
     public List<Track> tracks = new List<Track>();
     public float window = 1;
     private Camera mainCamera;
+    private float time;
     // Start is called before the first frame update
     void Start()
     {
         mainCamera = Camera.main;
+        InputManager.Instance.TrackDown_1 += () => { InputDown(tracks[0], time); };
+        InputManager.Instance.TrackDown_2 += () => { InputDown(tracks[1], time); };
+        InputManager.Instance.TrackDown_3 += () => { InputDown(tracks[2], time); };
+        InputManager.Instance.TrackDown_4 += () => { InputDown(tracks[3], time); };
+
+        InputManager.Instance.TrackUp_1 += () => { InputUp(tracks[0], time); };
+        InputManager.Instance.TrackUp_2 += () => { InputUp(tracks[1], time); };
+        InputManager.Instance.TrackUp_3 += () => { InputUp(tracks[2], time); };
+        InputManager.Instance.TrackUp_4 += () => { InputUp(tracks[3], time); };
     }
 
     // Update is called once per frame
     void Update()
     {
-        float time = (float)GameManager.Instance.time;
+        time = (float)GameManager.Instance.currentTime;
         UpdateActionUnitList(time);
-        CheckInput(time);
+        //CheckInput(time);
     }
     /// <summary>
     /// 更新各轨道上激活音符列表
@@ -53,7 +63,7 @@ public class UnitManager : MonoBehaviour
     /// 检测输入
     /// </summary>
     /// <param name="time"></param>
-    private void CheckInput(float time)
+    /*private void CheckInput(float time)
     {
         //if (Input.GetMouseButtonDown(0))
         //{
@@ -82,26 +92,7 @@ public class UnitManager : MonoBehaviour
         //        }
         //    }
         //}
-        if(Input.GetKeyDown(KeyCode.A))
-            InputDown(tracks[0],time);
-        if(Input.GetKeyUp(KeyCode.A))
-            InputUp(tracks[0],time);
-
-        if(Input.GetKeyDown(KeyCode.S))
-            InputDown(tracks[1],time);
-        if (Input.GetKeyUp(KeyCode.S))
-            InputUp(tracks[1],time);
-
-        if (Input.GetKeyDown(KeyCode.K))
-            InputDown(tracks[2], time);
-        if (Input.GetKeyUp(KeyCode.K))
-            InputUp(tracks[2], time);
-
-        if (Input.GetKeyDown(KeyCode.L))
-            InputDown(tracks[3], time);
-        if (Input.GetKeyUp(KeyCode.L))
-            InputUp(tracks[3], time);
-    }
+    }*/
     private void InputDown(Track track,float time)
     {
         Unit unit = track.ComparInputUnit(time, window);
