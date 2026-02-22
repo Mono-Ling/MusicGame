@@ -11,8 +11,8 @@ public class LevelItem : MonoBehaviour
     public float minScaleY;
     public LevelData levelData;
     public Text text;
-    private float scaleX;
-    private float scaleY;
+    public float scaleX;
+    public float scaleY;
     private float halfHeight;
     private int textSize;
     private SelectLevelPanel selectPanel;
@@ -22,8 +22,8 @@ public class LevelItem : MonoBehaviour
         selectPanel = UIManager.Instance.GetUI<SelectLevelPanel>();
         //halfHeight = selectPanel.height/2;
         textSize = text.fontSize;
-        scaleX = 300;//Screen.width / 4;
-        scaleY = 150;//Screen.height / 4;
+        //scaleX = 300;//Screen.width / 4;
+        //scaleY = 150;//Screen.height / 4;
         if(levelData == null )
         {
             Debug.LogError("LevelDataÎª¿Õ");

@@ -494,7 +494,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   edgeHeight: 2
-  itemHeight: 0
+  itemHeight: 150
   rectTransform: {fileID: 5381351425121783607}
   layoutElement: {fileID: 5200137220879139013}
   butStart: {fileID: 4293730034894255908}
