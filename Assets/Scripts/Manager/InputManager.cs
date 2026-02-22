@@ -107,7 +107,7 @@ public class InputManager : MonoBehaviour
     }
     public void StartCheck(UnityAction<KeyCode> action)
     {
-        StopInput();
+        StopCheck();//ԭΪStopInput
         checkCallback = action;
         StartCoroutine(CheckDelay());
     }
