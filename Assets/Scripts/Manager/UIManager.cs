@@ -70,10 +70,18 @@ public class UIManager
             Debug.LogWarning($"Ã»ÓÐÕÒµ½UI£º{name}");
             return;
         }
-        if (callback == null) callback = () => {GameObject.Destroy(uiDic[name]);
-                                                uiDic.Remove(name);};
-        else callback += () => { GameObject.Destroy(uiDic[name]);
-                                 uiDic.Remove(name);};
+        if (callback == null) callback = () => 
+        {
+            GameObject.Destroy(uiDic[name].gameObject);
+            uiDic.Remove(name);
+            //Debug.Log($"ÒÆ³ý{name}");
+        };
+        else callback += () => 
+        {
+            GameObject.Destroy(uiDic[name].gameObject);
+            uiDic.Remove(name);
+            //Debug.Log($"ÒÆ³ý{name}");
+        };
         uiDic[name].Hide(callback);
     }
 }

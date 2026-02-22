@@ -9,14 +9,17 @@ public class SelectLevelManager
     public LevelDataList levels { get; private set; }
     private List<UnitData> unitList;
     private AudioClip audio;
+    private Sprite coverSprite;
+    private string description;
     private int levelIndex;
     private SelectLevelManager()
     {
         levels = DataManager.Instance.levelDataList;
-        SetLevel(1);
+        //SetLevel(0);
     }
     public void SetLevel(int index)
     {
+        if(levelIndex == index) return;
         if (index >= levels.levelList.Count)
         {
             Debug.LogWarning("关卡索引越界");
@@ -30,8 +33,13 @@ public class SelectLevelManager
         levelIndex = index;
         unitList = null;
         audio = null;
-        GetLevelUnitDatas();
-        GetLevelMusicClip();
+        coverSprite = null;
+        description = null;
+        //GetLevelUnitDatas();
+        //GetLevelMusicClip();
+        GetCoverSprite();
+        GetDescription();
+        Debug.Log($"当前选中{levelIndex}");
     }
     public List<UnitData> GetLevelUnitDatas()
     {
@@ -42,9 +50,39 @@ public class SelectLevelManager
     public AudioClip GetLevelMusicClip()
     {
         if(audio != null) return audio;
-        string path = levels.levelList[levelIndex].name;
+        string path = levels.levelList[levelIndex].musicPath;
         audio = Resources.Load<AudioClip>($"Music/{path}");
         if (audio == null) Debug.LogError($"路径{path}不存在");
         return audio;
+    }
+    public Sprite GetCoverSprite()
+    {
+        if(coverSprite != null) return coverSprite;
+        string path = levels.levelList[levelIndex].texturePath;
+        coverSprite = Resources.Load<Sprite>($"LevelTexture/{path}");
+        if (coverSprite == null) Debug.LogError($"路径{path}不存在");
+        return coverSprite;
+    }
+    public string GetDescription()
+    {
+        if (description != null) return description;
+        description = levels.levelList[levelIndex].description;
+        return description;
+    }
+    private void ClearSelectBuffer()
+    {
+        coverSprite = null;
+        description = null;
+        Debug.Log("选择阶段缓存释放完成");
+    }
+    public void ExitSelectPanel()
+    {
+        ClearSelectBuffer();
+        GetLevelMusicClip();
+        GetLevelUnitDatas();
+    }
+    public bool CheckLevelData()
+    {
+        return levels != null && levels.levelList!=null && levels.levelList.Count > 0;
     }
 }

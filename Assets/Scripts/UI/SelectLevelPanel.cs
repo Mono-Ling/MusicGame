@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SelectLevelPanel : BaseUI
@@ -12,6 +13,9 @@ public class SelectLevelPanel : BaseUI
     public float itemHeight;
     public RectTransform rectTransform;
     public LayoutElement layoutElement;
+    public Button butStart;
+    public Image cover;
+    public Text description;
     public GameObject levelItemObj;
     private List<LevelItem> levelItems = new List<LevelItem>();
     private const string itemPath = "UI/LevelItem";
@@ -28,12 +32,21 @@ public class SelectLevelPanel : BaseUI
         {
             AddLevelItem(data);
         }
+        if(butStart == null)
+        {
+            Debug.LogError("开始按钮为空！");
+            return;
+        }
+        butStart.onClick.AddListener(GameStart);
     }
     protected override void Update()
     {
         base.Update();
         half = transform .position.y;
-        List<LevelData> datas = SelectLevelManager.Instance.levels.levelList;
+        int levelIndex = Select();
+        SelectLevelManager.Instance.SetLevel(levelIndex);
+        DisplayCover();
+        DisplayDescription();
     }
     private void AddLevelItem(LevelData data)
     {
@@ -41,9 +54,9 @@ public class SelectLevelPanel : BaseUI
         LevelItem item = obj.GetComponent<LevelItem>();
         levelItems.Add(item);
         item.levelData = data;
-        Debug.Log(levelItems.Count);
+        //Debug.Log(levelItems.Count);
     }
-    private LevelItem Select()
+    private int Select()
     {
         int left = 0;
         int right = levelItems.Count - 1;
@@ -59,7 +72,34 @@ public class SelectLevelPanel : BaseUI
                 right = mid - 1;
             }
         }
-        int targetIndex = Mathf.Max(0, right);
-        return levelItems[targetIndex];
+        int targetIndex = Mathf.Min(left, levelItems.Count-1);
+        //int targetIndex = Mathf.Max(0, right);
+        return targetIndex;
+    }
+    private void DisplayCover()
+    {
+        if(cover == null)
+        {
+            Debug.LogError("UI封面图片为空");
+            return;
+        }
+        cover.sprite = SelectLevelManager.Instance.GetCoverSprite();
+    }
+    private void DisplayDescription()
+    {
+        if(description == null)
+        {
+            Debug.LogError("UI描述文本组件为空");
+            return;
+        }
+        description.text = SelectLevelManager.Instance.GetDescription();
+    }
+    private void GameStart()
+    {
+        UIManager.Instance.HideUI<SelectLevelPanel>(() =>
+        {
+            SelectLevelManager.Instance.ExitSelectPanel();
+            SceneManager.LoadScene("Game");
+        });
     }
 }

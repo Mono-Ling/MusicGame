@@ -7,7 +7,13 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UIManager.Instance.ShowUI<SelectLevelPanel>();
+        if(SelectLevelManager.Instance.CheckLevelData()) UIManager.Instance.ShowUI<SelectLevelPanel>();
+        else
+        {
+            UIManager.Instance.ShowUI<WarningPanel>();
+            var warning = UIManager.Instance.GetUI<WarningPanel>();
+            warning.errorData = "”Œœ∑≥ı ºªØ¥ÌŒÛ";
+        }
     }
 
     // Update is called once per frame

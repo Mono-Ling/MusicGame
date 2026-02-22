@@ -1,11 +1,11 @@
 {
     "levelList": 
     [
-        {"name": "陈致逸 - Moonlike Smile 皎洁的笑颜","unitDataPath": "MusicUnit.json","level":1,"description":"测试关卡"},
-        {"name": "陈致逸 - Rex Incognito 尘世闲游","unitDataPath": "RexIncognito.json","level":1,"description":"测试关卡"},
-        {"name": "陈致逸 - Moonlike Smile 皎洁的笑颜","unitDataPath": "MusicUnit.json","level":1,"description":"测试关卡"},
-        {"name": "陈致逸 - Rex Incognito 尘世闲游","unitDataPath": "RexIncognito.json","level":1,"description":"测试关卡"},
-        {"name": "陈致逸 - Moonlike Smile 皎洁的笑颜","unitDataPath": "MusicUnit.json","level":1,"description":"测试关卡"},
-        {"name": "陈致逸 - Rex Incognito 尘世闲游","unitDataPath": "RexIncognito.json","level":1,"description":"测试关卡"}
+        {"name":"皎洁的笑颜","musicPath": "陈致逸 - Moonlike Smile 皎洁的笑颜","texturePath":"皎洁的笑颜","unitDataPath": "MusicUnit.json","time":77,"level":1,"description":"测试关卡"},
+        {"name":"尘世闲游","musicPath": "陈致逸 - Rex Incognito 尘世闲游","texturePath":"尘世闲游","unitDataPath": "RexIncognito.json","time":108,"level":1,"description":"测试关卡"},
+        {"name":"皎洁的笑颜","musicPath": "陈致逸 - Moonlike Smile 皎洁的笑颜","texturePath":"皎洁的笑颜","unitDataPath": "MusicUnit.json","time":77,"level":1,"description":"测试关卡"},
+        {"name":"尘世闲游","musicPath": "陈致逸 - Rex Incognito 尘世闲游","texturePath":"尘世闲游","unitDataPath": "RexIncognito.json","time":108,"level":1,"description":"测试关卡"},
+        {"name":"皎洁的笑颜","musicPath": "陈致逸 - Moonlike Smile 皎洁的笑颜","texturePath":"皎洁的笑颜","unitDataPath": "MusicUnit.json","time":77,"level":1,"description":"测试关卡"},
+        {"name":"尘世闲游","musicPath": "陈致逸 - Rex Incognito 尘世闲游","texturePath":"尘世闲游","unitDataPath": "RexIncognito.json","time":108,"level":1,"description":"测试关卡"}
     ]
 }
