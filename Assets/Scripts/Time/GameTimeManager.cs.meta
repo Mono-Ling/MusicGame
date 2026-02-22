@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/Manager/DataManager.cs.meta
+guid: 0cc3bd069562a5f4bba21769839738f1
+========
+guid: 7af666d11697e3946aa49cb7ecb1f1a0
+>>>>>>>> 完善计时系统（游戏时间/协程延时），基于dspTime:Assets/Scripts/Time/GameTimeManager.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

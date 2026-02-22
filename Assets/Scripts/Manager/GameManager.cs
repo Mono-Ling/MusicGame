@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     }
     public Queue<UnitData> unitDataQueue = new Queue<UnitData>();
     public float moveTime = 2;
-    public float time {  get; private set; }
+    public double time {  get; private set; }
     public int levelIndex;
     private bool musicPlaying = false;
     private List<UnitData> unitDataList;
@@ -44,28 +44,29 @@ public class GameManager : MonoBehaviour
             source = gameObject.AddComponent<AudioSource>();
         }
         source.loop = false;
-        source.enabled = false;
+        source.Stop();
+        GameTimeManager.Instance.PauseGame(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(UpdateMusicGameUnit());
+            source.Play();
+            GameTimeManager.Instance.PauseGame(false);
             musicPlaying = true;
-            source.enabled = true;
         }
-        if(musicPlaying)
-        {
-            time += Time.deltaTime;
-        }
+        //time = (float)GameTimeManager.Instance.GetGameTime();
+        if (musicPlaying)
+            time = GameTimeManager.Instance.GetGameTime();
     }
     IEnumerator UpdateMusicGameUnit()
     {
         UnitData firstUnitData = unitDataQueue.Peek();
         firstUnitData.SetStartTime(moveTime);
-        yield return new WaitForSeconds(firstUnitData.startTime);
+        yield return new WaitForDSPTime(firstUnitData.startTime);
         while (unitDataQueue.Count > 0)
         {
             UnitData unitData = unitDataQueue.Dequeue();
@@ -75,7 +76,7 @@ public class GameManager : MonoBehaviour
             UnitData nextUnit = unitDataQueue.Peek();
             nextUnit.SetStartTime(moveTime);
             float timeToNextUnit = nextUnit.startTime - unitData.startTime;
-            yield return new WaitForSeconds(timeToNextUnit);
+            yield return new WaitForDSPTime(timeToNextUnit);
         }
         Debug.Log("Ð­³Ì½áÊø");
     }

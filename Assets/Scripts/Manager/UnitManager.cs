@@ -28,7 +28,7 @@ public class UnitManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float time = GameManager.Instance.time;
+        float time = (float)GameManager.Instance.time;
         UpdateActionUnitList(time);
         CheckInput(time);
     }

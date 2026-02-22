@@ -48,10 +48,12 @@ public abstract class Unit : MonoBehaviour
     [SerializeField]
     protected float missShaderAlpha = 0.5f;
     protected UnityAction callback;
+    protected float moveTime;
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        startTime = GameManager.Instance.time;
+        startTime = (float)GameManager.Instance.time;
+        moveTime = GameManager.Instance.moveTime;
         startPos = transform.position.y;
         hitPos = Check.Instance.transform.position.y;
         InitMaterial();
@@ -78,7 +80,7 @@ public abstract class Unit : MonoBehaviour
         float wHeight = 2f * Camera.main.orthographicSize;
         float x1 = startPos - hitPos;
         float x2 = wHeight - x1+ spriteRenderer.bounds.size.y;
-        float t1 = unitHitTime - unitStartTime;
+        float t1 = moveTime;
         float v = x1 / t1;
         float t2 = x2 / v;
         endTime = unitHitTime + t2;
@@ -87,10 +89,11 @@ public abstract class Unit : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        float beforeCheckTime = (GameManager.Instance.time - startTime) / (unitHitTime - unitStartTime);
-        float afterCheckTime = (GameManager.Instance.time - unitHitTime) / (endTime - unitHitTime);
+        moveTime = GameManager.Instance.moveTime;
+        float beforeCheckTime = ((float)GameManager.Instance.time - unitStartTime) / (unitHitTime - unitStartTime);
+        float afterCheckTime = ((float)GameManager.Instance.time - unitHitTime) / (endTime - unitHitTime);
         if( beforeCheckTime >= 1 )
-            transform.position = new Vector3(transform.position.x, Mathf.Lerp(hitPos + offsetY, endPos, afterCheckTime), transform.position.z);
+            transform.position = new Vector3(transform.position.x, Mathf.Lerp(hitPos, endPos, afterCheckTime), transform.position.z);
         //transform.Translate(Vector3.down * Time.deltaTime * speed);
         else
             transform.position = new Vector3(transform.position.x, Mathf.Lerp(startPos,hitPos, beforeCheckTime), transform.position.z);
