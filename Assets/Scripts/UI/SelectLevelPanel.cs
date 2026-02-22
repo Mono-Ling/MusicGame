@@ -15,6 +15,7 @@ public class SelectLevelPanel : BaseUI
     public RectTransform rectTransform;
     public LayoutElement layoutElement;
     public Button butStart;
+    public Button butQuite;
     public Image cover;
     public Text description;
     public GameObject levelItemObj;
@@ -40,6 +41,12 @@ public class SelectLevelPanel : BaseUI
             return;
         }
         butStart.onClick.AddListener(GameStart);
+        if(butQuite == null)
+        {
+            Debug.LogError("ÍË³ö°´Å¥Îª¿Õ£¡");
+            return;
+        }
+        butQuite.onClick.AddListener(() => { Application.Quit(); });
     }
     protected override void Update()
     {
