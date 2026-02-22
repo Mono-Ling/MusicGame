@@ -3,15 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class BaseResultText : BaseUI
+public abstract class BaseResultText : BaseUI,IPoolItem
 {
+    public int maxNum = 5;
+    public double maxShowTime;
+    public double maxHideTime;
     public double showTime;
     public double hideTime;
     public Vector3 maxScale;
     public Vector3 minScale;
+    public event UnityAction Reset;
     protected double startTime;
     protected double currentTime;
     protected Vector3 startScale;
+    public void Init()
+    {
+        showTime = maxShowTime;
+        hideTime = maxHideTime;
+        transform.localScale = Vector3.one;
+        Reset?.Invoke();
+        Reset = null;
+    }
     protected override void Update()
     {
         currentTime = GameTimeManager.Instance.GetGameTime();
@@ -65,5 +77,13 @@ public abstract class BaseResultText : BaseUI
     {
         showTime *= scale;
         hideTime *= scale;
+    }
+    public int GetMaxNum()
+    {
+        return maxNum;
+    }
+    private void OnDisable()
+    {
+        Reset = null;
     }
 }

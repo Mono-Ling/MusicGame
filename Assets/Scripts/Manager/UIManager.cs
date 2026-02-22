@@ -102,13 +102,16 @@ public class UIManager
     {
         string name = typeof(T).Name;
         string filePath = Path.Combine("UI", name);
-        GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(filePath), canvasTransform, false);
+        //GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(filePath), canvasTransform, false);
+        GameObject obj = ObjectPool.Instance.GetObject(filePath);
         if (obj == null)
         {
             Debug.LogError($"{name}´ò¿ªÊ§°Ü");
             return null;
         }
+        obj.transform.SetParent(canvasTransform, false);
         T ui = obj.GetComponent<T>();
+        if (ui is IPoolItem) (ui as IPoolItem).Init();
         ui.Show(callback);
         return ui;
     }
@@ -117,7 +120,8 @@ public class UIManager
         if(ui == null) return;
         callback += () =>
         {
-            GameObject.Destroy(ui.gameObject);
+            //GameObject.Destroy(ui.gameObject);
+            ObjectPool.Instance.PutObject(ui.gameObject);
         };
         ui.Hide(callback,isAnimation);
     }

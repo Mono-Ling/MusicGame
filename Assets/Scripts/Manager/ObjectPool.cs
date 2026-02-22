@@ -59,7 +59,7 @@ public class PoolItem
     public int usedCount => usedItems.Count;
     public IPoolItem Get()
     {
-        IPoolItem item;
+        IPoolItem item = null;
         if (objectPool.Count == 0 && usedCount > maxNum)
         {
             item = usedItems[0];
@@ -68,8 +68,8 @@ public class PoolItem
             usedItems.Add(item);
             return item;
         }
-        item = objectPool.Dequeue();
-        usedItems.Add(item);
+       if(objectPool.Count > 0)  item = objectPool.Dequeue();
+       if(item != null)  usedItems.Add(item);
         return item;
     }
     public void Put(IPoolItem item)

@@ -15,7 +15,7 @@ public enum UnitState
     Miss,
 }
 [RequireComponent(typeof(SpriteRenderer))]
-public abstract class Unit : MonoBehaviour
+public abstract class Unit : MonoBehaviour,IPoolItem
 {
     public static UnitType GetUnitType(int unitType)
     {
@@ -38,6 +38,7 @@ public abstract class Unit : MonoBehaviour
     [Header("—’…´…Ë÷√")]
     public Color startColor;
     public Color endColor;
+    public event UnityAction Reset;
     //protected float startTime;
     protected float endTime;
     protected float startPos;
@@ -49,10 +50,25 @@ public abstract class Unit : MonoBehaviour
     protected float missShaderAlpha = 0.5f;
     protected UnityAction callback;
     protected float moveTime;
+    protected UnityAction Action;
+    protected Vector2 boundSize;
     // Start is called before the first frame update
     protected virtual void Start()
     {
         //startTime = (float)GameManager.Instance.time;
+        material = new Material(shader);
+        material.hideFlags = HideFlags.HideAndDontSave;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.material = material;
+        boundSize = spriteRenderer.bounds.size;
+        OnAction();
+        Action = OnAction;
+    }
+    protected virtual void OnAction()
+    {
+        callback = null;
+        state = UnitState.Action;
+        spriteRenderer = GetComponent<SpriteRenderer>();
         moveTime = GameManager.Instance.moveTime;
         startPos = transform.position.y;
         hitPos = Check.Instance.transform.position.y;
@@ -60,12 +76,14 @@ public abstract class Unit : MonoBehaviour
         SetScale();
         SetEnd();
     }
+    public void Init()
+    {
+        Action?.Invoke();
+        Reset?.Invoke();
+        Reset = null;
+    }
     protected virtual void InitMaterial()
     {
-        material = new Material(shader);
-        material.hideFlags = HideFlags.HideAndDontSave;
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.material = material;
         material.SetColor("_StartColor", startColor);
         material.SetColor("_EndColor", endColor);
         material.SetFloat("_Alpha", 1f);
@@ -79,12 +97,13 @@ public abstract class Unit : MonoBehaviour
 
         float wHeight = 2f * Camera.main.orthographicSize;
         float x1 = startPos - hitPos;
-        float x2 = wHeight - x1+ spriteRenderer.bounds.size.y;
+        //float x2 = wHeight - x1+ spriteRenderer.bounds.size.y;
+        float distanceToEnd = wHeight + spriteRenderer.bounds.size.y;
         float t1 = moveTime;
         float v = x1 / t1;
-        float t2 = x2 / v;
+        float t2 = distanceToEnd / v;
         endTime = unitHitTime + t2;
-        endPos = hitPos - x2;
+        endPos = hitPos - distanceToEnd;
     }
     // Update is called once per frame
     protected virtual void Update()
@@ -110,7 +129,12 @@ public abstract class Unit : MonoBehaviour
     }
     public virtual void DestoryUnit()
     {
+        //if(material != null) Destroy(material);
+        //Destroy(gameObject);
+        ObjectPool.Instance.PutObject(gameObject);
+    }
+    private void OnDestroy()
+    {
         if(material != null) Destroy(material);
-        Destroy(gameObject);
     }
 }

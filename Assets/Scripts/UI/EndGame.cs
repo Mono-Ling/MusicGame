@@ -15,10 +15,18 @@ public class EndGame : BaseUI
     }
     private void Quit()
     {
-        UIManager.Instance.HideUI<EndGame>(() => { SceneManager.LoadScene("Begin"); });
+        UIManager.Instance.HideUI<EndGame>(() => 
+        { 
+            SceneManager.LoadScene("Begin"); 
+            ObjectPool.Instance.ClearPool();
+        });
     }
     private void Again()
     {
-        UIManager.Instance.HideUI<EndGame>(() => { SceneManager.LoadScene("Game"); });
+        UIManager.Instance.HideUI<EndGame>(() => 
+        { 
+            SceneManager.LoadScene("Game");
+            ObjectPool.Instance.ClearPool();
+        });
     }
 }

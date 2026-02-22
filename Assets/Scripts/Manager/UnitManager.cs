@@ -68,7 +68,14 @@ public class UnitManager : MonoBehaviour
     {
         Unit unit = track.ComparInputUnit(time, window);
         if (unit != null) unit.HitUnit(time, () => { unit.DestoryUnit(); });
-        if (unit != null && unit.type == UnitType.Hold) track.holdingUnit = unit;
+        if (unit != null && unit.type == UnitType.Hold)
+        {
+            track.holdingUnit = unit;
+            unit.Reset += () =>
+            {
+                track.holdingUnit = null;
+            };
+        }
     }
     private void InputUp(Track track,float time)
     {
@@ -80,8 +87,9 @@ public class UnitManager : MonoBehaviour
     }
     public void CreateUnit(UnitData unitData,float moveTime = 2)
     {
-        GameObject unitPrefab = Resources.Load<GameObject>($"MusicGameUnit/{unitData.unitType}");
-        GameObject unitObj = Instantiate(unitPrefab);
+        //GameObject unitPrefab = Resources.Load<GameObject>($"MusicGameUnit/{unitData.unitType}");
+        //GameObject unitObj = Instantiate(unitPrefab);
+        GameObject unitObj = ObjectPool.Instance.GetObject($"MusicGameUnit/{unitData.unitType}");
         Vector2 screenStep = new Vector2(Screen.width / 6f, Screen.height);
         //unitObj.transform.position = new Vector3(unitData.trackId * 2 - 4, 6, 0);
         Unit unit = unitObj.GetComponent<Unit>();
@@ -93,5 +101,6 @@ public class UnitManager : MonoBehaviour
         unitObj.transform.position = mainCamera.ScreenToWorldPoint(new Vector3(screenStep.x * (unitData.trackId + 0.5f), screenStep.y, 0));
         unitObj.transform.position = new Vector3(unitObj.transform.position.x, unitObj.transform.position.y + 0.5f, 0);
         tracks[unitData.trackId-1].actionUnits.Add(unit);
+        unit.Init();
     }
 }

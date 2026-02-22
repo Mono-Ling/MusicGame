@@ -51,6 +51,11 @@ public class DisplayResultManager : MonoBehaviour
         if (newText == null) return;
         UpdateList(textList);
         textList.Add(newText);
+        newText.Reset += () =>
+        {
+            textList.Remove(newText);
+            Debug.Log("提前回收");
+        };
     }
     private void UpdateList(List<BaseResultText> list)
     {

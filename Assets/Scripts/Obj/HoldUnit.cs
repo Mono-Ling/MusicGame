@@ -15,6 +15,11 @@ public class HoldUnit : Unit
     private bool isHold;
     private float holdProgress;
     private const string shaderName = "Unlit/HoldUnit";
+    protected override void OnAction()
+    {
+        base.OnAction();
+        isHold = false;
+    }
     protected override void SetScale()
     {
         base.SetScale();
@@ -22,13 +27,15 @@ public class HoldUnit : Unit
         //float moveTime = unitHitTime - unitStartTime;
         float step = far / moveTime;
         float height = step * unitDuration;
-        scaleY = height / spriteRenderer.bounds.size.y;
+        scaleY = height / boundSize.y;
         transform.localScale = new Vector3(scaleX, scaleY, 1);
     }
     protected override void InitMaterial()
     {
         //shader = Shader.Find(shaderName);
         base.InitMaterial();
+        holdProgress = 1;
+        material.SetFloat("_HoldProgress", holdProgress);
         //material.SetColor("_EdgeStartColor",edgeStartColor);
         //material.SetColor("_EdgeEndColor",edgeEndColor);
         //material.SetFloat("_EdgeThreshold", edgeThreshold);
