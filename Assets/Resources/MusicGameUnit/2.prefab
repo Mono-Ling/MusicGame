@@ -104,7 +104,7 @@ MonoBehaviour:
   unitHitTime: 0
   unitDuration: 0
   type: 0
-  shader: {fileID: 0}
+  shader: {fileID: 4800000, guid: e2a1a7c10965e274fa9e639b282739da, type: 3}
   startColor: {r: 0, g: 0.5342088, b: 1, a: 0}
   endColor: {r: 1, g: 0, b: 0.55660915, a: 0}
   missShaderAlpha: 0.5

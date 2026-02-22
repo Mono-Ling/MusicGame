@@ -14,17 +14,23 @@ public class Bloom : MonoBehaviour
     public int iteration;
     [Range(0, 3)]
     public float blurSpread;
+    public Shader shader;
     private Material material;
-    private Shader shader;
     // Start is called before the first frame update
     void Start()
     {
-        shader = Shader.Find("Unlit/Bloom");
+        //shader = Shader.Find("Unlit/Bloom");
+        if (shader == null) Debug.LogError("Shader¡°Bloom¡±²»´æÔÚ");
         material = new Material(shader);
         material.hideFlags = HideFlags.DontSave;
     }
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
+        if (material == null)
+        {
+            Graphics.Blit(source, destination);
+            return;
+        }
         material.SetFloat("_LThreshold", LThreshold);
         material.SetColor("_BloomColor", bloomColor);
         int w = source.width / downSample;

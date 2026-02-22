@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,11 +8,12 @@ public class UIManager
 {
     private static UIManager instance;
     public static UIManager Instance => instance ?? (instance = new UIManager());
-    private const string canvasPath = "UI/Canvas";
+    //private const string canvasPath = "UI/Canvas";
     private Transform canvasTransform;
     private Dictionary<string,BaseUI> uiDic = new Dictionary<string,BaseUI>();
     private UIManager() 
-    { 
+    {
+        string canvasPath = Path.Combine("UI","Canvas");
         var canvas = GameObject.Instantiate(Resources.Load<GameObject>(canvasPath));
         if (canvas == null)
         {
@@ -47,7 +49,8 @@ public class UIManager
             Debug.LogWarning($"{name}已打开");
             return;
         }
-        GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>($"UI/{name}"),canvasTransform,false);
+        string filePath = Path.Combine("UI", name);
+        GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(filePath),canvasTransform,false);
         if (obj == null)
         {
             Debug.LogError($"{name}打开失败");

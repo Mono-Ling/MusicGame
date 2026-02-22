@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -9,7 +10,7 @@ using UnityEngine.UI;
 public class SelectLevelPanel : BaseUI
 {
     public float half {  get; private set; }
-    //public float edgeHeight;
+    public float edgeHeight;
     public float itemHeight;
     public RectTransform rectTransform;
     public LayoutElement layoutElement;
@@ -18,14 +19,15 @@ public class SelectLevelPanel : BaseUI
     public Text description;
     public GameObject levelItemObj;
     private List<LevelItem> levelItems = new List<LevelItem>();
-    private const string itemPath = "UI/LevelItem";
+    private string itemPath = "UI/LevelItem";
     protected override void InitUI()
     {
+        itemPath = Path.Combine("UI", "LevelItem");
         levelItemObj = Resources.Load<GameObject>(itemPath);
         List<LevelData> datas = SelectLevelManager.Instance.levels.levelList;
         if (layoutElement != null)
         {
-            float height = 260; //Screen.height / edgeHeight;
+            float height = Screen.height / edgeHeight;
             layoutElement.minHeight = 140 * datas.Count + height * 2;
         }
         foreach (LevelData data in datas)

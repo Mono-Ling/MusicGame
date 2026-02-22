@@ -418,6 +418,7 @@ MonoBehaviour:
   downSample: 1
   iteration: 4
   blurSpread: 3
+  shader: {fileID: 4800000, guid: 44df6f574f1d91840adab54daabad8db, type: 3}
 --- !u!1001 &1252659310
 PrefabInstance:
   m_ObjectHideFlags: 0

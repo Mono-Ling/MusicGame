@@ -8,7 +8,7 @@ public class ClickUnit : Unit
     private const string shaderName = "Unlit/ClickUnit";
     protected override void InitMaterial()
     {
-        shader = Shader.Find(shaderName);
+        //shader = Shader.Find(shaderName);
         base.InitMaterial();
     }
     public override void HitUnit(float time = 0, UnityAction callback = null)

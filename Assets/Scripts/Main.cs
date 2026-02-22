@@ -36,5 +36,6 @@ public class Main : MonoBehaviour
             warning.errorData = "游戏初始化错误";
         }
         StateManager.Instance.GameStart();
+        Debug.Log("初始化");
     }
 }

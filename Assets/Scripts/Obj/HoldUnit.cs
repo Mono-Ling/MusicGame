@@ -26,7 +26,7 @@ public class HoldUnit : Unit
     }
     protected override void InitMaterial()
     {
-        shader = Shader.Find(shaderName);
+        //shader = Shader.Find(shaderName);
         base.InitMaterial();
         //material.SetColor("_EdgeStartColor",edgeStartColor);
         //material.SetColor("_EdgeEndColor",edgeEndColor);

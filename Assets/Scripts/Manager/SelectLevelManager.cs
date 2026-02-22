@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class SelectLevelManager
@@ -53,7 +54,8 @@ public class SelectLevelManager
     {
         if(audio != null) return audio;
         string path = levels.levelList[levelIndex].musicPath;
-        audio = Resources.Load<AudioClip>($"Music/{path}");
+        string filePath = Path.Combine("Music", path);
+        audio = Resources.Load<AudioClip>(filePath);
         if (audio == null) Debug.LogError($"路径{path}不存在");
         return audio;
     }
@@ -69,7 +71,8 @@ public class SelectLevelManager
     {
         if(coverSprite != null) return coverSprite;
         string path = levels.levelList[levelIndex].texturePath;
-        coverSprite = Resources.Load<Sprite>($"LevelTexture/{path}");
+        string filePath = Path.Combine("LevelTexture", path);
+        coverSprite = Resources.Load<Sprite>(filePath);
         if (coverSprite == null) Debug.LogError($"路径{path}不存在");
         return coverSprite;
     }

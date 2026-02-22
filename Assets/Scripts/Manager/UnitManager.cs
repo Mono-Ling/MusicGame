@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -33,6 +32,9 @@ public class UnitManager : MonoBehaviour
         InputManager.Instance.TrackUp_2 += () => { InputUp(tracks[1], time); };
         InputManager.Instance.TrackUp_3 += () => { InputUp(tracks[2], time); };
         InputManager.Instance.TrackUp_4 += () => { InputUp(tracks[3], time); };
+
+        InputManager.Instance.ScreenInputTrackDown += (track) => { InputDown(track, time); };
+        InputManager.Instance.ScreenInputTrackUp += (track) => { InputUp(track, time); };
     }
 
     // Update is called once per frame

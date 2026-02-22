@@ -13,7 +13,7 @@ public class DataManager
     const string levelDataPath = "LevelData.json";
     private DataManager()
     {
-        levelDataList = LoadData<LevelDataList>($"/{levelDataPath}");
+        levelDataList = LoadData<LevelDataList>($"{levelDataPath}");
         if (levelDataList == null)
         {
             Debug.LogError("º”‘ÿ ß∞‹");
@@ -26,13 +26,14 @@ public class DataManager
     }
     private T LoadData<T>(string path)
     {
-        string json = File.ReadAllText(Application.streamingAssetsPath + path);
+        string filePath = Path.Combine(Application.streamingAssetsPath, path);
+        string json = File.ReadAllText(filePath);
         return JsonMapper.ToObject<T>(json);
     }
     public List<UnitData> GetUnitList(LevelData levelData)
     {
         //LevelData levelData = levelDataList.levelList[levelIndex];
-        MusicUnitList unitDataList = LoadData<MusicUnitList>($"/{levelData.unitDataPath}");
+        MusicUnitList unitDataList = LoadData<MusicUnitList>($"{levelData.unitDataPath}");
         if (unitDataList == null)
         {
             Debug.LogError("º”‘ÿ ß∞‹");
@@ -48,7 +49,7 @@ public class DataManager
     {
         if(levelData == null) return null;
         if (levelData.effectDataPath == null) return null;
-        EffectDataList effect = LoadData<EffectDataList>($"/{levelData.effectDataPath}");
+        EffectDataList effect = LoadData<EffectDataList>($"{levelData.effectDataPath}");
         if (effect == null)
         {
             Debug.LogError("º”‘ÿ ß∞‹");
