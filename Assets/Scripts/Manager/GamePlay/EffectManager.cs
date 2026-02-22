@@ -10,7 +10,7 @@ public class EffectManager : MonoBehaviour
     {
         if(instance != null)
         {
-            Destroy(instance.gameObject);
+            Destroy(gameObject);
             Debug.LogWarning("单例重复注册");
         }
         instance = this;
@@ -28,6 +28,7 @@ public class EffectManager : MonoBehaviour
         {
             Debug.LogError("Bloom组件为空");
             enabled = false;
+            return;
         }
         if (keyframDatas == null)
         {
@@ -40,17 +41,24 @@ public class EffectManager : MonoBehaviour
         {
             keyframeDataQueue.Enqueue(data);
         }
-        InputManager.Instance.StartGame += () => 
-        { 
-            StartCoroutine(UpdateEffect());
-            Debug.Log("后处理启动");
-        };
+        //InputManager.Instance.StartGame += () => 
+        //{ 
+        //    StartCoroutine(UpdateEffect());
+        //    Debug.Log("后处理启动");
+        //};
+        EventBus.Instance.AddListener(EventType.StartGame,StartEffect);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+    private void StartEffect()
+    {
+        StartCoroutine(UpdateEffect());
+        Debug.Log("后处理启动");
+        EventBus.Instance.RemoveListener(EventType.StartGame, StartEffect);
     }
     IEnumerator UpdateEffect()
     {

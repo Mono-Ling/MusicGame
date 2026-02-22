@@ -24,15 +24,6 @@ public class UnitManager : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
-        //InputManager.Instance.TrackDown_1 += () => { InputDown(tracks[0], time); };
-        //InputManager.Instance.TrackDown_2 += () => { InputDown(tracks[1], time); };
-        //InputManager.Instance.TrackDown_3 += () => { InputDown(tracks[2], time); };
-        //InputManager.Instance.TrackDown_4 += () => { InputDown(tracks[3], time); };
-
-        //InputManager.Instance.TrackUp_1 += () => { InputUp(tracks[0], time); };
-        //InputManager.Instance.TrackUp_2 += () => { InputUp(tracks[1], time); };
-        //InputManager.Instance.TrackUp_3 += () => { InputUp(tracks[2], time); };
-        //InputManager.Instance.TrackUp_4 += () => { InputUp(tracks[3], time); };
 
         EventBus.Instance.AddListener(EventType.Track_1_Down,Track_1_Down);
         EventBus.Instance.AddListener(EventType.Track_2_Down, Track_2_Down);
@@ -44,8 +35,8 @@ public class UnitManager : MonoBehaviour
         EventBus.Instance.AddListener(EventType.Track_3_Up, Track_3_Up);
         EventBus.Instance.AddListener(EventType.Track_4_Up, Track_4_Up);
 
-        InputManager.Instance.ScreenInputTrackDown += (track) => { InputDown(track, time); };
-        InputManager.Instance.ScreenInputTrackUp += (track) => { InputUp(track, time); };
+        EventBus.Instance.AddListener<Track>(EventType.ScreenInputTrackDown, ScreenInputDown);
+        EventBus.Instance.AddListener<Track>(EventType.ScreenInputTrackUp, ScreenInputUp);
     }
 
     // Update is called once per frame
@@ -76,12 +67,16 @@ public class UnitManager : MonoBehaviour
     private void Track_1_Down(){ InputDown(tracks[0], time);}
     private void Track_2_Down() { InputDown(tracks[1], time); }
     private void Track_3_Down() { InputDown(tracks[2], time); }
-
     private void Track_4_Down() { InputDown(tracks[3], time); }
+
     private void Track_1_Up() { InputUp(tracks[0], time); }
     private void Track_2_Up() { InputUp(tracks[1], time); }
     private void Track_3_Up() { InputUp(tracks[2], time); }
     private void Track_4_Up() { InputUp(tracks[3], time); }
+
+    private void ScreenInputDown(Track track) { InputDown(track, time); }
+    private void ScreenInputUp(Track track) { InputUp(track, time); }
+
     private void InputDown(Track track,float time)
     {
         Unit unit = track.ComparInputUnit(time, window);
@@ -132,5 +127,8 @@ public class UnitManager : MonoBehaviour
         EventBus.Instance.RemoveListener(EventType.Track_2_Up, Track_2_Up);
         EventBus.Instance.RemoveListener(EventType.Track_3_Up, Track_3_Up);
         EventBus.Instance.RemoveListener(EventType.Track_4_Up, Track_4_Up);
+
+        EventBus.Instance.RemoveListener<Track>(EventType.ScreenInputTrackDown, ScreenInputDown);
+        EventBus.Instance.RemoveListener<Track>(EventType.ScreenInputTrackUp, ScreenInputUp);
     }
 }

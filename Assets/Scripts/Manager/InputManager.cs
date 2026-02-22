@@ -6,7 +6,19 @@ using UnityEngine.Events;
 public class InputManager : MonoBehaviour
 {
     private static InputManager _instance;
-    public static InputManager Instance => _instance;
+    public static InputManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject obj = new GameObject($"{typeof(InputManager)}");
+                _instance = obj.AddComponent<InputManager>();
+                DontDestroyOnLoad( obj );
+            }
+            return _instance;
+        }
+    }
     private void Awake()
     {
         if(_instance != null && _instance != this)
@@ -17,68 +29,69 @@ public class InputManager : MonoBehaviour
         }
         _instance = this;
     }
-    public event UnityAction StartGame;
-    public event UnityAction PauseGame;
-    //public event UnityAction TrackDown_1;
-    //public event UnityAction TrackUp_1;
-    //public event UnityAction TrackDown_2;
-    //public event UnityAction TrackUp_2;
-    //public event UnityAction TrackDown_3;
-    //public event UnityAction TrackUp_3;
-    //public event UnityAction TrackDown_4;
-    //public event UnityAction TrackUp_4;
-    public event UnityAction<Track> ScreenInputTrackDown;
-    public event UnityAction<Track> ScreenInputTrackUp;
+    //public event UnityAction StartGame;
+    //public event UnityAction PauseGame;
     private GamePanel gamePanel;
+    private bool isRunning = false;
     // Start is called before the first frame update
     void Start()
     {
-        UIManager.Instance.ShowUI<GamePanel>();
-        gamePanel = UIManager.Instance.GetUI<GamePanel>();
-        gamePanel.InputDown += ScreenInputDown;
-        gamePanel.InputUp += ScreenInputUp;
-        gamePanel.InputPause += () => { PauseGame?.Invoke(); };
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKeyDown && StartGame != null)
+        if (!isRunning) return;
+        if (Input.anyKeyDown/* && StartGame != null*/)
         {
-            StartGame += () => { StartGame = null; };
-            StartGame?.Invoke();
+            //StartGame += () => { StartGame = null; };
+            //StartGame?.Invoke();
+            EventBus.Instance.TriggerEvent(EventType.StartGame);
         }
-        if(Input.GetKeyDown(KeyCode.Escape)) PauseGame?.Invoke();
         KeyInput();
+    }
+    public void StartInput()
+    {
+        UIManager.Instance.ShowUI<GamePanel>();
+        gamePanel = UIManager.Instance.GetUI<GamePanel>();
+        gamePanel.InputDown += ScreenInputDown;
+        gamePanel.InputUp += ScreenInputUp;
+        gamePanel.InputPause += () =>
+        {
+            //PauseGame?.Invoke(); 
+            EventBus.Instance.TriggerEvent(EventType.PauseGame);
+        };
+        isRunning = true;
+    }
+    public void StopInput()
+    {
+        UIManager.Instance.HideUI<GamePanel>();
+        isRunning = false;
     }
     private void KeyInput()
     {
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+            EventBus.Instance.TriggerEvent(EventType.PauseGame);
+
         if (Input.GetKeyDown(KeyCode.A))
-            //TrackDown_1?.Invoke();
             EventBus.Instance.TriggerEvent(EventType.Track_1_Down);
         if (Input.GetKeyUp(KeyCode.A))
-            //TrackUp_1?.Invoke();
             EventBus.Instance.TriggerEvent(EventType.Track_1_Up);
 
         if (Input.GetKeyDown(KeyCode.S))
-            //TrackDown_2?.Invoke();
             EventBus.Instance.TriggerEvent(EventType.Track_2_Down);
         if (Input.GetKeyUp(KeyCode.S))
-            //TrackUp_2?.Invoke();
             EventBus.Instance.TriggerEvent(EventType.Track_2_Up);
 
         if (Input.GetKeyDown(KeyCode.K))
-            //TrackDown_3?.Invoke();
             EventBus.Instance.TriggerEvent(EventType.Track_3_Down);
         if (Input.GetKeyUp(KeyCode.K))
-            //TrackUp_3?.Invoke();
             EventBus.Instance.TriggerEvent(EventType.Track_3_Up);
 
         if (Input.GetKeyDown(KeyCode.L))
-            //TrackDown_4?.Invoke();
             EventBus.Instance.TriggerEvent(EventType.Track_4_Down);
         if (Input.GetKeyUp(KeyCode.L))
-            //TrackUp_4?.Invoke();
             EventBus.Instance.TriggerEvent(EventType.Track_4_Up);
     }
     private void ScreenInputDown(GameObject obj)
@@ -86,7 +99,7 @@ public class InputManager : MonoBehaviour
         if (obj == null) return;
         if (obj.CompareTag("Track"))
         {
-            ScreenInputTrackDown?.Invoke(obj.GetComponent<Track>());
+            EventBus.Instance.TriggerEvent<Track>(EventType.ScreenInputTrackDown, obj.GetComponent<Track>());
         }
     }
     private void ScreenInputUp(GameObject obj)
@@ -94,13 +107,13 @@ public class InputManager : MonoBehaviour
         if (obj == null) return;
         if (obj.CompareTag("Track"))
         {
-            ScreenInputTrackUp?.Invoke(obj.GetComponent<Track>());
+            EventBus.Instance.TriggerEvent<Track>(EventType.ScreenInputTrackUp, obj.GetComponent<Track>());
         }
     }
     private void OnDestroy()
     {
-        StartGame = null;
-        PauseGame = null;
+        //StartGame = null;
+        //PauseGame = null;
         UIManager.Instance.HideUI<GamePanel>();
     }
 }

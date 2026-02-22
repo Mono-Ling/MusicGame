@@ -50,14 +50,22 @@ public class EventBus
     {
         if (!eventDic.ContainsKey(eventType)) return;
         if (eventDic[eventType] is EventInfo)
-            (eventDic[eventType] as EventInfo).actions -= callback;
+        {
+            EventInfo info = eventDic[eventType] as EventInfo;
+            info.actions -= callback;
+            if(info.actions == null) eventDic.Remove(eventType);
+        }
         else Debug.LogError($"{eventType}事件参数类型错误");
     }
     public void RemoveListener<T>(EventType eventType, UnityAction<T> callback)
     {
         if (!eventDic.ContainsKey(eventType)) return;
         if (eventDic[eventType] is EventInfo<T>)
-            (eventDic[eventType] as EventInfo<T>).actions -= callback;
+        {
+            EventInfo<T> info = eventDic[eventType] as EventInfo<T>;
+            info.actions -= callback;
+            if (info.actions == null) eventDic.Remove(eventType);
+        }
         else Debug.LogError($"{eventType}事件参数类型错误");
     }
     public void Clear()

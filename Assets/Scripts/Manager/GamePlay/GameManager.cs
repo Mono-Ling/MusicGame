@@ -59,8 +59,13 @@ public class GameManager : MonoBehaviour
         GameTimeManager.Instance.PauseGame(true);
         StartCoroutine(GameProgress());
         UIManager.Instance.ShowUI<InitGame>();
-        InputManager.Instance.StartGame += ()=> UIManager.Instance.HideUI<InitGame>(StartGame);
-        InputManager.Instance.PauseGame += () => PauseGame();
+        //InputManager.Instance.StartGame += ()=> UIManager.Instance.HideUI<InitGame>(StartGame);
+        //InputManager.Instance.PauseGame += () => PauseGame();
+
+        EventBus.Instance.AddListener(EventType.StartGame, StartGame);
+        EventBus.Instance.AddListener(EventType.PauseGame, PauseGame);
+
+        InputManager.Instance.StartInput();
 
         if (keyframeDatas == null || keyframeDatas.Count == 0)
         {
@@ -71,11 +76,11 @@ public class GameManager : MonoBehaviour
         {
             keyframeDataQueue.Enqueue(keyframeData);
         }
-        if (keyframeDataQueue != null && keyframeDataQueue.Count > 0)
-        {
-            InputManager.Instance.StartGame += () => { StartCoroutine(UpdateMoveTime()); };
-        }
-        else Debug.LogWarning($"{this}音符移动速度插值协程初始化异常");
+        //if (keyframeDataQueue != null && keyframeDataQueue.Count > 0)
+        //{
+        //    //InputManager.Instance.StartGame += () => { StartCoroutine(UpdateMoveTime()); };
+        //}
+        //else Debug.LogWarning($"{this}音符移动速度插值协程初始化异常");
     }
 
     // Update is called once per frame
@@ -111,10 +116,18 @@ public class GameManager : MonoBehaviour
     }
     private void StartGame()
     {
+        UIManager.Instance.HideUI<InitGame>(StartGamePlay);
+    }
+    private void StartGamePlay()
+    {
         StartCoroutine(UpdateMusicGameUnit());
         source.Play();
         GameTimeManager.Instance.PauseGame(false);
         isPlaying = true;
+        if (keyframeDataQueue != null && keyframeDataQueue.Count > 0)
+            StartCoroutine(UpdateMoveTime());
+        else Debug.LogWarning($"{this}音符移动速度插值协程初始化异常");
+        EventBus.Instance.RemoveListener(EventType.StartGame,StartGame);
     }
     private void PauseGame()
     {
@@ -165,5 +178,10 @@ public class GameManager : MonoBehaviour
     public float GetWindowScale()
     {
         return Mathf.Clamp(moveTime/maxMoveTime, 0.2f, 1);
+    }
+    private void OnDestroy()
+    {
+        EventBus.Instance.RemoveListener(EventType.PauseGame,PauseGame);
+        InputManager.Instance.StopInput();
     }
 }
