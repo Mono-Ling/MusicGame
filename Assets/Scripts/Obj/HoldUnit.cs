@@ -19,7 +19,7 @@ public class HoldUnit : Unit
     {
         base.SetScale();
         float far = startPos - hitPos;
-        float moveTime = unitHitTime - unitStartTime;
+        //float moveTime = unitHitTime - unitStartTime;
         float step = far / moveTime;
         scaleY = step * unitDuration;
         transform.localScale = new Vector3(scaleX, scaleY, 1);

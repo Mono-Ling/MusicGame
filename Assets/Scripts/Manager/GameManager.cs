@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        unitDataList = DataManager.Instance.GetUnitList(levelIndex);
+        unitDataList = SelectLevelManager.Instance.GetLevelUnitDatas();
         if(unitDataList == null || unitDataList.Count == 0)
         {
             Debug.LogError("音游单位数据列表为空");
@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning($"{source}为空，已更新组件");
             source = gameObject.AddComponent<AudioSource>();
         }
+        source.clip = SelectLevelManager.Instance.GetLevelMusicClip();
         source.loop = false;
         source.Stop();
         GameTimeManager.Instance.PauseGame(true);
@@ -70,12 +71,12 @@ public class GameManager : MonoBehaviour
         while (unitDataQueue.Count > 0)
         {
             UnitData unitData = unitDataQueue.Dequeue();
-            unitData.SetStartTime(moveTime);
+            //unitData.SetStartTime(moveTime);
             UnitManager.Instance.CreateUnit(unitData);
             if (unitDataQueue.Count == 0) break;
             UnitData nextUnit = unitDataQueue.Peek();
             nextUnit.SetStartTime(moveTime);
-            float timeToNextUnit = nextUnit.startTime - unitData.startTime;
+            float timeToNextUnit = nextUnit.startTime - (float)time;
             yield return new WaitForDSPTime(timeToNextUnit);
         }
         Debug.Log("协程结束");

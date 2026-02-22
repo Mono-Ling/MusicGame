@@ -38,7 +38,7 @@ public abstract class Unit : MonoBehaviour
     [Header("—’…´…Ë÷√")]
     public Color startColor;
     public Color endColor;
-    protected float startTime;
+    //protected float startTime;
     protected float endTime;
     protected float startPos;
     protected float hitPos;
@@ -52,7 +52,7 @@ public abstract class Unit : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        startTime = (float)GameManager.Instance.time;
+        //startTime = (float)GameManager.Instance.time;
         moveTime = GameManager.Instance.moveTime;
         startPos = transform.position.y;
         hitPos = Check.Instance.transform.position.y;

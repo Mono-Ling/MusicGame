@@ -7,11 +7,11 @@ public class WaitForDSPTime : CustomYieldInstruction
     private double targetTime;
     public WaitForDSPTime(double seconds)
     {
-        targetTime = GameTimeManager.Instance.GetGameTime() + seconds;
+        targetTime = AudioSettings.dspTime + seconds;
     }
 
     public override bool keepWaiting
     {
-        get { return GameTimeManager.Instance.GetGameTime() < targetTime; }
+        get { return AudioSettings.dspTime < targetTime; }
     }
 }

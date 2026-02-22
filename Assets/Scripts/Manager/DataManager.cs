@@ -9,7 +9,7 @@ public class DataManager
     private static DataManager _instance;
     public static DataManager Instance => _instance ??= new DataManager();
     //public MusicUnitList unitDataList;
-    private LevelDataList levelDataList;
+    public LevelDataList levelDataList {  get; private set; }
     const string levelDataPath = "LevelData.json";
     private DataManager()
     {
@@ -29,9 +29,9 @@ public class DataManager
         string json = File.ReadAllText(Application.streamingAssetsPath + path);
         return JsonMapper.ToObject<T>(json);
     }
-    public List<UnitData> GetUnitList(int levelIndex)
+    public List<UnitData> GetUnitList(LevelData levelData)
     {
-        LevelData levelData = levelDataList.levelList[levelIndex];
+        //LevelData levelData = levelDataList.levelList[levelIndex];
         MusicUnitList unitDataList = LoadData<MusicUnitList>($"/{levelData.unitDataPath}");
         if (unitDataList == null)
         {
