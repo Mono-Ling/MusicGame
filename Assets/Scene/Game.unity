@@ -319,6 +319,7 @@ GameObject:
   - component: {fileID: 721644267}
   - component: {fileID: 721644266}
   - component: {fileID: 721644265}
+  - component: {fileID: 721644268}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -400,6 +401,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &721644268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721644264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 472674913ca7bed45bee01145008ef2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LThreshold: 1
+  bloomColor: {r: 1, g: 1, b: 1, a: 0}
+  downSample: 1
+  iteration: 4
+  blurSpread: 3
 --- !u!1001 &1252659310
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -451,6 +469,30 @@ PrefabInstance:
     - target: {fileID: 3493310700876942276, guid: 9c59de14e8340b1419b8da3422f87aa7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3581524892367690505, guid: 9c59de14e8340b1419b8da3422f87aa7, type: 3}
+      propertyPath: color.a
+      value: 0.19607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 3581524892367690505, guid: 9c59de14e8340b1419b8da3422f87aa7, type: 3}
+      propertyPath: color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3581524892367690505, guid: 9c59de14e8340b1419b8da3422f87aa7, type: 3}
+      propertyPath: color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3581524892367690505, guid: 9c59de14e8340b1419b8da3422f87aa7, type: 3}
+      propertyPath: color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3581524892367690505, guid: 9c59de14e8340b1419b8da3422f87aa7, type: 3}
+      propertyPath: material
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 3581524892367690505, guid: 9c59de14e8340b1419b8da3422f87aa7, type: 3}
+      propertyPath: lineWidth
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 9107347536645806057, guid: 9c59de14e8340b1419b8da3422f87aa7, type: 3}
       propertyPath: m_Name
