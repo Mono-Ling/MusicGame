@@ -10,7 +10,7 @@ public class UIManager
     public static UIManager Instance => instance ?? (instance = new UIManager());
     //private const string canvasPath = "UI/Canvas";
     private Transform canvasTransform;
-    private Transform tempCanvasTransform;
+    //private Transform tempCanvasTransform;
     private Dictionary<string,BaseUI> uiDic = new Dictionary<string,BaseUI>();
     private UIManager() 
     {
@@ -23,15 +23,15 @@ public class UIManager
         }
         canvasTransform = canvas.transform;
         GameObject.DontDestroyOnLoad(canvas);
-        canvasPath = Path.Combine("UI", "TempUICanvas");
-        var tempCanvas = GameObject.Instantiate(Resources.Load<GameObject>(canvasPath));
-        if (canvas == null)
-        {
-            Debug.LogError("TempCanvas加载失败");
-            return;
-        }
-        tempCanvasTransform = tempCanvas.transform;
-        GameObject.DontDestroyOnLoad (tempCanvas);
+        //canvasPath = Path.Combine("UI", "TempUICanvas");
+        //var tempCanvas = GameObject.Instantiate(Resources.Load<GameObject>(canvasPath));
+        //if (canvas == null)
+        //{
+        //    Debug.LogError("TempCanvas加载失败");
+        //    return;
+        //}
+        //tempCanvasTransform = tempCanvas.transform;
+        //GameObject.DontDestroyOnLoad (tempCanvas);
     }
     /// <summary>
     /// 获取UI（预设体名须与类名一至）
@@ -102,7 +102,7 @@ public class UIManager
     {
         string name = typeof(T).Name;
         string filePath = Path.Combine("UI", name);
-        GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(filePath), tempCanvasTransform, false);
+        GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(filePath), canvasTransform, false);
         if (obj == null)
         {
             Debug.LogError($"{name}打开失败");
