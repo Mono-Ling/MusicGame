@@ -115,8 +115,7 @@ public class SelectLevelPanel : BaseUI
     {
         UIManager.Instance.HideUI<SelectLevelPanel>(() =>
         {
-            SelectLevelManager.Instance.ExitSelectPanel();
-            SceneManager.LoadScene("Game");
+            SelectLevelManager.Instance.ExitSelectPanel(() => SceneManager.LoadScene("Game"));
         });
     }
 }
