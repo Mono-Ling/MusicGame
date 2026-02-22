@@ -30,6 +30,13 @@ public class EffectManager : MonoBehaviour
             enabled = false;
             return;
         }
+        if (!SettingManager.Instance.isUseBloom)
+        {
+            bloom.enabled = false;
+            enabled = false;
+            Debug.Log("后处理效果关闭");
+            return;
+        }
         if (keyframDatas == null)
         {
             bloom.enabled = false;

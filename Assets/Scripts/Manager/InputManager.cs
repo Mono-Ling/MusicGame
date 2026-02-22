@@ -31,7 +31,7 @@ public class InputManager : MonoBehaviour
     }
     private UnityAction StartGame;
     //public event UnityAction PauseGame;
-    private Dictionary<EventType,KeyCode> keyInputDic = new Dictionary<EventType,KeyCode>();
+    private Dictionary<EventType, KeyCode> keyInputDic;
     private GamePanel gamePanel;
     private bool isRunning = false;
     private bool isCheckInput = false;
@@ -39,6 +39,9 @@ public class InputManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        keyInputDic = SettingManager.Instance.keySettingDic;
+        if(keyInputDic != null && keyInputDic.Count > 0) return;
+        keyInputDic = new Dictionary<EventType, KeyCode>();
         SetKeyInput(EventType.Track_1, KeyCode.A);
         SetKeyInput(EventType.Track_2, KeyCode.S);
         SetKeyInput(EventType.Track_3, KeyCode.K);
@@ -74,7 +77,11 @@ public class InputManager : MonoBehaviour
             Debug.LogError("按键映射字典不能为空");
             return;
         }
-        this.keyInputDic = new Dictionary<EventType, KeyCode>(keyInputDic);
+        this.keyInputDic = keyInputDic;
+    }
+    public void ClearKeyInputDic()
+    {
+        keyInputDic.Clear();
     }
     public void StartInput()
     {

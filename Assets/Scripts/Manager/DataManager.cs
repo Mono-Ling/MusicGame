@@ -1,4 +1,5 @@
 using LitJson;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -120,6 +121,51 @@ public class DataManager
             Debug.Log($"关键帧数据数量：{keyframe.keyframeList.Count}");
         }
         return keyframe.keyframeList;
+    }
+    public SettingData LoadSettingData(string settingPath)
+    {
+        try
+        {
+            if (settingPath == null) return null;
+            string json = File.ReadAllText(Application.persistentDataPath + $"/{settingPath}.json");
+            SettingData data = JsonConvert.DeserializeObject<SettingData>(json);
+            if (data == null) Debug.LogWarning($"{settingPath}加载为空");
+            return data;
+        }
+        catch
+        {
+            Debug.LogError($"设置数据加载失败");
+            return null;
+        }
+    }
+    public void SaveSettingData(string settingPath, SettingData data)
+    {
+        try
+        {
+            // 1. 安全拼接路径，避免重复的/符号
+            string fullPath = Path.Combine(Application.persistentDataPath, $"{settingPath}.json");
+
+            // 2. 获取文件所在目录，并确保目录存在
+            string directoryPath = Path.GetDirectoryName(fullPath);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            // 3. 将数据序列化为JSON（使用Unity内置的JsonUtility，兼容性更好）
+            string json = JsonConvert.SerializeObject(data); // true表示格式化输出，便于查看
+
+            // 4. 写入文件
+            File.WriteAllText(fullPath, json, System.Text.Encoding.UTF8);
+
+            // 5. 输出成功日志，便于调试
+            Debug.Log($"设置数据保存成功，路径：{fullPath}");
+        }
+        // 捕获具体异常，便于定位问题
+        catch (System.ArgumentNullException ex)
+        {
+            Debug.LogError($"设置数据保存失败：路径为空 - {ex.Message}");
+        }
     }
 }
 public class  MusicUnitList
