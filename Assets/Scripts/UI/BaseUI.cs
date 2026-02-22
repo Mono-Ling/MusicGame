@@ -7,7 +7,8 @@ using UnityEngine.Events;
 public abstract class BaseUI : MonoBehaviour
 {
     [Header("œ‘“˛ÀŸ∂»")]
-    public float speed = 5f;
+    public float showSpeed = 5f;
+    public float hideSpeed = 5f;
     protected CanvasGroup canvasGroup;
     protected UnityAction showCallback;
     protected UnityAction hideCallback;
@@ -35,13 +36,18 @@ public abstract class BaseUI : MonoBehaviour
         isShow = true;
         showCallback = callback;
     }
-    public virtual void Hide(UnityAction callback = null)
+    public virtual void Hide(UnityAction callback = null,bool isAnimation = true)
     {
         canvasGroup.alpha = 1;
         isShow = false;
         hideCallback = callback;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+        if (!isAnimation)
+        {
+            hideCallback?.Invoke();
+            hideCallback = null;
+        }
     }
     protected virtual void ShowAnimation()
     {
@@ -52,7 +58,7 @@ public abstract class BaseUI : MonoBehaviour
             showCallback = null;
             return;
         }
-        canvasGroup.alpha += Time.deltaTime * speed;
+        canvasGroup.alpha += Time.deltaTime * showSpeed;
     }
     protected virtual void HideAnimation()
     {
@@ -63,6 +69,6 @@ public abstract class BaseUI : MonoBehaviour
             hideCallback = null;
             return;
         }
-        canvasGroup.alpha -= Time.deltaTime * speed;
+        canvasGroup.alpha -= Time.deltaTime * hideSpeed;
     }
 }

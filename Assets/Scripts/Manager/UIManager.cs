@@ -41,31 +41,32 @@ public class UIManager
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="callback"></param>
-    public void ShowUI<T>(UnityAction callback = null) where T : BaseUI
+    public bool ShowUI<T>(UnityAction callback = null) where T : BaseUI
     {
         string name = typeof (T).Name;
         if(uiDic.ContainsKey(name))
         {
             Debug.LogWarning($"{name}已打开");
-            return;
+            return false;
         }
         string filePath = Path.Combine("UI", name);
         GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(filePath),canvasTransform,false);
         if (obj == null)
         {
             Debug.LogError($"{name}打开失败");
-            return;
+            return false;
         }
         T ui = obj.GetComponent<T>();
         uiDic.Add(name, ui);
         ui.Show(callback);
+        return true;
     }
     /// <summary>
     /// 隐藏UI（预设体名须与类名一至）
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="callback"></param>
-    public void HideUI<T>(UnityAction callback = null) where T : BaseUI
+    public void HideUI<T>(UnityAction callback = null, bool isAnimation = true) where T : BaseUI
     {
         string name = typeof( T ).Name;
         if (!uiDic.ContainsKey(name))
@@ -85,6 +86,6 @@ public class UIManager
             uiDic.Remove(name);
             //Debug.Log($"移除{name}");
         };
-        uiDic[name].Hide(callback);
+        uiDic[name].Hide(callback,isAnimation);
     }
 }

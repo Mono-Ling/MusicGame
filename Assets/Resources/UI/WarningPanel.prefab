@@ -71,7 +71,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 660006b44737de3438fead561cc43888, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  showSpeed: 5
+  hideSpeed: 5
   errorData: ErrorData
   text: {fileID: 2756146212832562833}
   butQuit: {fileID: 1693845202493596343}
