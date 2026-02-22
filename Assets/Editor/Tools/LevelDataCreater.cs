@@ -115,6 +115,15 @@ public class LevelDataCreater : EditorWindow
         level.level = EditorGUILayout.IntField("等级",level.level);
         EditorGUILayout.Space();
         level.description = EditorGUILayout.TextField("描述", level.description);
+        EditorGUILayout.Space();
+        ColorData lowColorData = level.bkLowColor;
+        ColorData highColorData = level.bkHighColor;
+        Color lowColor = new Color(lowColorData.r,lowColorData.g,lowColorData.b,lowColorData.a);
+        Color hightColor = new Color(highColorData.r,highColorData.g,highColorData.b,highColorData.a);
+        lowColor = EditorGUILayout.ColorField("低区颜色", lowColor);
+        hightColor = EditorGUILayout.ColorField("高区颜色",hightColor);
+        level.bkLowColor.SetColor(lowColor);
+        level.bkHighColor.SetColor(hightColor);
         //EditorGUILayout.EndHorizontal();
     }
     private void Save(List<LevelData> levels)

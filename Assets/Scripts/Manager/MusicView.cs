@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.UI.CanvasScaler;
 
 public class MusicView : MonoBehaviour
 {
@@ -25,6 +24,8 @@ public class MusicView : MonoBehaviour
     public Material material;
     public bool isNormalize = true;
     private Camera mainCamera;
+    private Color lowColor;
+    private Color highColor;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +34,13 @@ public class MusicView : MonoBehaviour
         float scale = mainCamera.orthographicSize * 2 * mainCamera.aspect / 6f; //screenStep.x / 100f;
         transform.localScale = new Vector3(scale * 4,scale * 2, 1);
         transform.position = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width/2,0,0));
+        ColorData[] colorDatas = SelectLevelManager.Instance.GetBKColor();
+        ColorData color = colorDatas[0];
+        lowColor = new Color(color.r, color.g,color.b,color.a);
+        color = colorDatas[1];
+        highColor = new Color(color.r, color.g, color.b, color.a);
+        material.SetColor("_Color", lowColor);
+        material.SetColor ("_MaxColor", highColor);
     }
 
     // Update is called once per frame

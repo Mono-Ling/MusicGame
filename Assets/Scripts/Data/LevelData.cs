@@ -14,9 +14,12 @@ public class LevelData
     public float maxMoveTime;
     public int level;
     public string description;
+    public ColorData bkLowColor;
+    public ColorData bkHighColor;
     public LevelData(string name, 
-        string musicPath,string texturePath,string unitDataPath,string effectDataPath ,string moveTimeDataPath,
-        int level,float time,float maxMoveTime,string description)
+        string musicPath, string texturePath, string unitDataPath, string effectDataPath, string moveTimeDataPath,
+        int level, float time, float maxMoveTime, string description,
+        ColorData bkLowColor, ColorData bkHighColor)
     {
         this.name = name;
         this.musicPath = musicPath;
@@ -28,6 +31,8 @@ public class LevelData
         this.maxMoveTime = maxMoveTime;
         this.level = level;
         this.description = description;
+        this.bkLowColor = bkLowColor;
+        this.bkHighColor = bkHighColor;
     }
     public LevelData() { }
 }

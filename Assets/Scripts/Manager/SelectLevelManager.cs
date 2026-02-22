@@ -81,6 +81,15 @@ public class SelectLevelManager
     {
         return levels.levelList[levelIndex].maxMoveTime;
     }
+    /// <summary>
+    /// 索引0为低区颜色，索引1为高区颜色
+    /// </summary>
+    /// <returns></returns>
+    public ColorData[] GetBKColor()
+    {
+        return new ColorData[]{levels.levelList[levelIndex].bkLowColor, 
+                               levels.levelList[levelIndex].bkHighColor };
+    }
     public Sprite GetCoverSprite()
     {
         if(coverSprite != null) return coverSprite;
