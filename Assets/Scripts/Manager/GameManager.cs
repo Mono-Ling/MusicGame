@@ -62,6 +62,12 @@ public class GameManager : MonoBehaviour
         //time = (float)GameTimeManager.Instance.GetGameTime();
         if (musicPlaying)
             time = GameTimeManager.Instance.GetGameTime();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameTimeManager.Instance.PauseGame(musicPlaying);
+            musicPlaying = !musicPlaying;
+            print("ÔÝÍ£");
+        }
     }
     IEnumerator UpdateMusicGameUnit()
     {
