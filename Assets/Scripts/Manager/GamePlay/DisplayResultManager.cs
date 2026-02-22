@@ -4,9 +4,11 @@ using UnityEngine;
 
 public enum ResultType
 {
+    None,
     Perfect,
     Great,
     Good,
+    Miss,
 }
 public class DisplayResultManager : MonoBehaviour
 {
@@ -34,19 +36,47 @@ public class DisplayResultManager : MonoBehaviour
         greatWindow = spetTime * 2;
         goodWindow = spetTime * 3;
     }
+    public void GetInputResult(float timeDiff)
+    {
+        timeDiff = Mathf.Abs(timeDiff);
 
-    // Update is called once per frame
-    void Update()
-    {
+        ResultType resultType = ResultType.None;
+        if (timeDiff < perfectWindow) resultType = ResultType.Perfect;
+        else if (timeDiff < greatWindow) resultType = ResultType.Great;
+        else resultType = ResultType.Good;
+
+        UpdateResult(resultType);
     }
-    public void AddTask(float time)
+    public void GetMissResult()
     {
-        time = Mathf.Abs(time);
+        UpdateResult(ResultType.Miss);
+        Debug.Log("¡¾Miss¡¿Ê§Ð§Òô·û");
+    }
+    private void UpdateResult(ResultType resultType)
+    {
+        UpdateResultTextUI(resultType);
+        EventBus.Instance.TriggerEvent<ResultType>(EventType.Update_InputResult, resultType);
+    }
+    private void UpdateResultTextUI(ResultType resultType)
+    {
         BaseResultText newText = null;
 
-        if (time < perfectWindow) newText = UIManager.Instance.DontBufferShowUI<PerfectText>(EndShow);
-        else if (time < greatWindow) newText = UIManager.Instance.DontBufferShowUI<GreatText>(EndShow);
-        else newText = UIManager.Instance.DontBufferShowUI<GoodText>(EndShow);
+        switch(resultType)
+        {
+            case ResultType.Perfect:
+                newText = UIManager.Instance.DontBufferShowUI<PerfectText>(EndShow);
+                break;
+            case ResultType.Great:
+                newText = UIManager.Instance.DontBufferShowUI<GreatText>(EndShow);
+                break;
+            case ResultType.Good:
+                newText = UIManager.Instance.DontBufferShowUI<GoodText>(EndShow);
+                break;
+            case ResultType.Miss:
+                break;
+            default:
+                break;
+        }
 
         if (newText == null) return;
         UpdateList(textList);

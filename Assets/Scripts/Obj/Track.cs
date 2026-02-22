@@ -39,7 +39,7 @@ public class Track : MonoBehaviour
             {
                 targetIndex = mid;
                 targetUnit = midUnit;
-                DisplayResultManager.Instance.AddTask(time - midUnit.unitHitTime);
+                DisplayResultManager.Instance.GetInputResult(time - midUnit.unitHitTime);
                 break;
             }
             else if (time - midUnit.unitHitTime > window)

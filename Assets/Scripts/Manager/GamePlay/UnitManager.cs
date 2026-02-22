@@ -56,6 +56,8 @@ public class UnitManager : MonoBehaviour
             {
                 unit.UnitMiss(() => { unit.DestoryUnit(); });
                 tracks[i].actionUnits.RemoveAt(0);
+
+                DisplayResultManager.Instance.GetMissResult();
             }
         }
     }

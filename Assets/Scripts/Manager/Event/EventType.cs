@@ -36,7 +36,12 @@ public enum EventType
     Track_4,
 
     /// <summary>
-    /// SettingData参数类型
+    /// 无参
     /// </summary>
     Update_SettingData,
+
+    /// <summary>
+    /// ResultType参数
+    /// </summary>
+    Update_InputResult,
 }
