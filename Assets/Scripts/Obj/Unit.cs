@@ -21,6 +21,8 @@ public abstract class Unit : MonoBehaviour,IPoolItem
     {
         return (UnitType)unitType;
     }
+    [Header("对象池最大缓存容量")]
+    public int maxNum = 3;
     [Header("触发位置偏移")]
     public float offsetY = 0.2f;
     [Header("缩放")]
@@ -33,6 +35,8 @@ public abstract class Unit : MonoBehaviour,IPoolItem
     [Header("音符类型")]
     public UnitType type = UnitType.None;
     public UnitState state {  get; protected set; }
+    //public ExtendType extendType { get; set; } = ExtendType.Extend;
+
     [Header("着色器")]
     public Shader shader;
     [Header("颜色设置")]
@@ -79,8 +83,6 @@ public abstract class Unit : MonoBehaviour,IPoolItem
     public void Init()
     {
         Action?.Invoke();
-        Reset?.Invoke();
-        Reset = null;
     }
     protected virtual void InitMaterial()
     {
@@ -137,4 +139,10 @@ public abstract class Unit : MonoBehaviour,IPoolItem
     {
         if(material != null) Destroy(material);
     }
+    public void OnReset()
+    {
+        Reset?.Invoke();
+        Reset = null;
+    }
+    //public int GetMaxNum() { return maxNum; }
 }

@@ -73,7 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showSpeed: 5
   hideSpeed: 5
-  maxNum: 4
+  maxNum: 3
   maxShowTime: 0.5
   maxHideTime: 0.5
   showTime: 0.5

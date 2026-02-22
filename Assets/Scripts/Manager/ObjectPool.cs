@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ObjectPool
 {
@@ -10,13 +11,13 @@ public class ObjectPool
     private Dictionary<string,PoolItem> poolDic = new Dictionary<string,PoolItem>();
     public GameObject GetObject(string name)
     {
-        if (!poolDic.ContainsKey(name)) poolDic.Add(name, new PoolItem());
+        if (!poolDic.ContainsKey(name)) poolDic.Add(name, new PoolItem(name));
         IPoolItem item;
         GameObject obj = null;
         PoolItem poolItem = poolDic[name];
         if (poolItem.poolCount == 0 && poolItem.usedCount < poolItem.maxNum)
         {
-            GameObject prefab = Resources.Load<GameObject>(name);
+            GameObject prefab = poolItem.prefab; //Resources.Load<GameObject>(name);
             if (prefab == null)
             {
                 Debug.LogError($"{name}预设体不存在");
@@ -28,8 +29,8 @@ public class ObjectPool
         }
         else
             item = poolItem.Get();
-        if (item != null) poolItem.AddUsed(item);
-        else Debug.LogError($"{name}不存在对象池接口");
+        //if (item != null) poolItem.AddUsed(item);
+        //else Debug.LogError($"{name}不存在对象池接口");
         if (obj == null && item is Component component) obj = component.gameObject;
         obj?.SetActive(true);
         return obj;
@@ -42,6 +43,7 @@ public class ObjectPool
         if(!poolDic.ContainsKey(name)) return;
         PoolItem poolItem = poolDic[name];
         IPoolItem item = obj.GetComponent<IPoolItem>();
+        item.OnReset();
         poolItem.Put(item);
     }
     public void ClearPool()
@@ -57,6 +59,7 @@ public class PoolItem
     public int maxNum {  get; private set; } = int.MaxValue;
     public int poolCount => objectPool.Count;
     public int usedCount => usedItems.Count;
+    public GameObject prefab {  get; private set; }
     public IPoolItem Get()
     {
         IPoolItem item = null;
@@ -65,6 +68,7 @@ public class PoolItem
             item = usedItems[0];
             usedItems.RemoveAt(0);
             //item.Init();
+            item.OnReset();
             usedItems.Add(item);
             return item;
         }
@@ -76,6 +80,7 @@ public class PoolItem
     {
         if (item == null) return;
         //item.Init();
+        item.OnReset();
         objectPool.Enqueue(item);
         usedItems.Remove(item);
     }
@@ -85,11 +90,19 @@ public class PoolItem
         usedItems.Add(item);
         maxNum = item.GetMaxNum();
     }
-    public PoolItem() { }
+    public PoolItem(string name) 
+    {
+        prefab = Resources.Load<GameObject>(name);
+        if (prefab == null)
+            Debug.LogError($"{name}预设体不存在");
+    }
 }
 public interface IPoolItem
 {
+    event UnityAction Reset;
+    //ExtendType extendType { get; set; }
     void Init();
+    void OnReset();
     int GetMaxNum()
     {
         return int.MaxValue;

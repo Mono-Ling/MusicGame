@@ -16,13 +16,14 @@ public abstract class BaseResultText : BaseUI,IPoolItem
     protected double startTime;
     protected double currentTime;
     protected Vector3 startScale;
+
+    //public ExtendType extendType { get; set; } = ExtendType.Reuse;
+
     public void Init()
     {
         showTime = maxShowTime;
         hideTime = maxHideTime;
         transform.localScale = Vector3.one;
-        Reset?.Invoke();
-        Reset = null;
     }
     protected override void Update()
     {
@@ -84,6 +85,11 @@ public abstract class BaseResultText : BaseUI,IPoolItem
     }
     private void OnDisable()
     {
+        Reset = null;
+    }
+    public void OnReset()
+    {
+        Reset?.Invoke();
         Reset = null;
     }
 }
