@@ -17,26 +17,9 @@ public class ObjectPool
     public GameObject GetObject(string name)
     {
         if (!poolDic.ContainsKey(name)) poolDic.Add(name, new PoolItem(name));
-        IPoolItem item;
         GameObject obj = null;
         PoolItem poolItem = poolDic[name];
-        if (poolItem.poolCount == 0 && 
-            (poolItem.usedCount < poolItem.maxNum||poolItem.extendType == ExtendType.Extend))
-        {
-            GameObject prefab = poolItem.prefab; //Resources.Load<GameObject>(name);
-            if (prefab == null)
-            {
-                Debug.LogError($"{name}预设体不存在");
-                return null;
-            }
-            obj = GameObject.Instantiate(prefab);
-            obj.name = name;
-            item = obj.GetComponent<IPoolItem>();
-        }
-        else
-            item = poolItem.Get();
-        //if (item != null) poolItem.AddUsed(item);
-        //else Debug.LogError($"{name}不存在对象池接口");
+        IPoolItem item = poolItem.Get(name);
         if (obj == null && item is Component component) obj = component.gameObject;
         obj?.SetActive(true);
         return obj;
@@ -66,6 +49,10 @@ public class PoolItem
     public int usedCount => usedItems.Count;
     public ExtendType extendType { get; private set; }
     public GameObject prefab {  get; private set; }
+    /// <summary>
+    /// 弃用
+    /// </summary>
+    /// <returns></returns>
     public IPoolItem Get()
     {
         IPoolItem item = null;
@@ -80,6 +67,47 @@ public class PoolItem
         }
        else if(objectPool.Count > 0)  item = objectPool.Dequeue();
        if(item != null)  usedItems.Add(item);
+        return item;
+    }
+    public IPoolItem Get(string name)
+    {
+        IPoolItem item = null;
+        if(poolCount > 0) item = objectPool.Dequeue();
+        else
+        {
+            if (usedCount > maxNum)
+            {
+                switch (extendType)
+                {
+                    case ExtendType.Extend:
+                        item = CreateObject(name);
+                        break;
+                    case ExtendType.Reuse:
+                        item = usedItems[0];
+                        usedItems.RemoveAt(0);
+                        item.OnReset();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else item = CreateObject(name);
+        }
+        if (item != null) usedItems.Add(item);
+        return item;
+    }
+    private IPoolItem CreateObject(string name)
+    {
+        IPoolItem item = null;
+        if (prefab == null)
+        {
+            Debug.LogError($"{name}预设体为空");
+            return null;
+        }
+        GameObject itemObj = GameObject.Instantiate(prefab);
+        itemObj.name = name;
+        item = itemObj.GetComponent<IPoolItem>();
+        if (item == null) Debug.LogWarning($"{name}未继承对象池接口");
         return item;
     }
     public void Put(GameObject obj)
@@ -131,8 +159,5 @@ public interface IPoolItem
     ExtendType extendType { get; set; }
     void Init();
     void OnReset();
-    int GetMaxNum()
-    {
-        return int.MaxValue;
-    }
+    int GetMaxNum() => int.MaxValue;
 }

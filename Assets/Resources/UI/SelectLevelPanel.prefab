@@ -616,7 +616,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showSpeed: 3
   hideSpeed: 5
-  edgeHeight: 2
+  edgeHeight: 2.4
   itemHeight: 150
   rectTransform: {fileID: 5381351425121783607}
   layoutElement: {fileID: 5200137220879139013}
