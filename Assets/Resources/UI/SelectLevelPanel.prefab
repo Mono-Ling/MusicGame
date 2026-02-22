@@ -461,8 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20206700669583a4ca40740bcc04f439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  edgeHeight: 3.5
+  speed: 3
   itemHeight: 0
   rectTransform: {fileID: 5381351425121783607}
   layoutElement: {fileID: 5200137220879139013}

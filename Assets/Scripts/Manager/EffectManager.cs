@@ -65,7 +65,7 @@ public class EffectManager : MonoBehaviour
             if (Mathf.Approximately(endTime, startTime))
             {
                 currentValue = endValue;
-                bloom.LThreshold = bloomMaxValue - currentValue;
+                bloom.LThreshold = 1 - Mathf.SmoothStep(currentValue, bloomMaxValue, currentValue * bloomMaxValue);
                 keyframeDataQueue.Dequeue();
                 continue;
             }
@@ -75,14 +75,14 @@ public class EffectManager : MonoBehaviour
                 if (currentTime >= endTime)
                 {
                     currentValue = endValue;
-                    float clampedValue = Mathf.Clamp(currentValue, 0, bloomMaxValue);
-                    bloom.LThreshold = bloomMaxValue - clampedValue;
+                    //float clampedValue = Mathf.Clamp(currentValue, 0, bloomMaxValue);
+                    bloom.LThreshold = 1 - Mathf.SmoothStep(currentValue, bloomMaxValue, currentValue * bloomMaxValue);
                     break;
                 }
                 float t = (currentTime - startTime) / (endTime - startTime);
                 t = Mathf.Clamp01(t);
                 currentValue = Mathf.Lerp(startValue, endValue, t);
-                bloom.LThreshold = bloomMaxValue - Mathf.Clamp(currentValue, 0, bloomMaxValue);
+                bloom.LThreshold = 1 - Mathf.SmoothStep(currentValue, bloomMaxValue, currentValue * bloomMaxValue);
                 yield return null;
             }
             keyframeDataQueue.Dequeue();
