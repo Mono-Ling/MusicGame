@@ -25,15 +25,10 @@ public class UnitManager : MonoBehaviour
     {
         mainCamera = Camera.main;
 
-        EventBus.Instance.AddListener(EventType.Track_1_Down,Track_1_Down);
-        EventBus.Instance.AddListener(EventType.Track_2_Down, Track_2_Down);
-        EventBus.Instance.AddListener(EventType.Track_3_Down, Track_3_Down);
-        EventBus.Instance.AddListener(EventType.Track_4_Down, Track_4_Down);
-
-        EventBus.Instance.AddListener(EventType.Track_1_Up, Track_1_Up);
-        EventBus.Instance.AddListener(EventType.Track_2_Up, Track_2_Up);
-        EventBus.Instance.AddListener(EventType.Track_3_Up, Track_3_Up);
-        EventBus.Instance.AddListener(EventType.Track_4_Up, Track_4_Up);
+        EventBus.Instance.AddListener<KeyInputType>(EventType.Track_1,Track_1);
+        EventBus.Instance.AddListener<KeyInputType>(EventType.Track_2, Track_2);
+        EventBus.Instance.AddListener<KeyInputType>(EventType.Track_3, Track_3);
+        EventBus.Instance.AddListener<KeyInputType>(EventType.Track_4, Track_4);
 
         EventBus.Instance.AddListener<Track>(EventType.ScreenInputTrackDown, ScreenInputDown);
         EventBus.Instance.AddListener<Track>(EventType.ScreenInputTrackUp, ScreenInputUp);
@@ -64,15 +59,37 @@ public class UnitManager : MonoBehaviour
             }
         }
     }
-    private void Track_1_Down(){ InputDown(tracks[0], time);}
-    private void Track_2_Down() { InputDown(tracks[1], time); }
-    private void Track_3_Down() { InputDown(tracks[2], time); }
-    private void Track_4_Down() { InputDown(tracks[3], time); }
 
-    private void Track_1_Up() { InputUp(tracks[0], time); }
-    private void Track_2_Up() { InputUp(tracks[1], time); }
-    private void Track_3_Up() { InputUp(tracks[2], time); }
-    private void Track_4_Up() { InputUp(tracks[3], time); }
+    private void Track_1(KeyInputType inputType)
+    {
+        KeyTrackInput(tracks[0], inputType);
+    }
+    private void Track_2(KeyInputType inputType)
+    {
+        KeyTrackInput(tracks[1], inputType);
+    }
+    private void Track_3(KeyInputType inputType)
+    {
+        KeyTrackInput(tracks[2], inputType);
+    }
+    private void Track_4(KeyInputType inputType)
+    {
+        KeyTrackInput(tracks[3],inputType);
+    }
+    private void KeyTrackInput(Track track, KeyInputType inputType)
+    {
+        switch (inputType)
+        {
+            case KeyInputType.Down:
+                InputDown(track, time);
+                break;
+            case KeyInputType.Up:
+                InputUp(track, time);
+                break;
+            default:
+                break;
+        }
+    }
 
     private void ScreenInputDown(Track track) { InputDown(track, time); }
     private void ScreenInputUp(Track track) { InputUp(track, time); }
@@ -118,15 +135,10 @@ public class UnitManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        EventBus.Instance.RemoveListener(EventType.Track_1_Down, Track_1_Down);
-        EventBus.Instance.RemoveListener(EventType.Track_2_Down, Track_2_Down);
-        EventBus.Instance.RemoveListener(EventType.Track_3_Down, Track_3_Down);
-        EventBus.Instance.RemoveListener(EventType.Track_4_Down, Track_4_Down);
-
-        EventBus.Instance.RemoveListener(EventType.Track_1_Up, Track_1_Up);
-        EventBus.Instance.RemoveListener(EventType.Track_2_Up, Track_2_Up);
-        EventBus.Instance.RemoveListener(EventType.Track_3_Up, Track_3_Up);
-        EventBus.Instance.RemoveListener(EventType.Track_4_Up, Track_4_Up);
+        EventBus.Instance.RemoveListener<KeyInputType>(EventType.Track_1, Track_1);
+        EventBus.Instance.RemoveListener<KeyInputType>(EventType.Track_2, Track_2);
+        EventBus.Instance.RemoveListener<KeyInputType>(EventType.Track_3, Track_3);
+        EventBus.Instance.RemoveListener<KeyInputType>(EventType.Track_4, Track_4);
 
         EventBus.Instance.RemoveListener<Track>(EventType.ScreenInputTrackDown, ScreenInputDown);
         EventBus.Instance.RemoveListener<Track>(EventType.ScreenInputTrackUp, ScreenInputUp);

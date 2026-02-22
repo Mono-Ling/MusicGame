@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,29 +28,53 @@ public class InputManager : MonoBehaviour
             Debug.LogWarning("场景中已经存在InputManager实例，新的实例将被销毁");
             return;
         }
-        _instance = this;
     }
-    //public event UnityAction StartGame;
+    private UnityAction StartGame;
     //public event UnityAction PauseGame;
+    private Dictionary<EventType,KeyCode> keyInputDic = new Dictionary<EventType,KeyCode>();
     private GamePanel gamePanel;
     private bool isRunning = false;
+    private bool isCheckInput = false;
+    private UnityAction<KeyCode> checkCallback;
     // Start is called before the first frame update
     void Start()
     {
-        
+        SetKeyInput(EventType.Track_1, KeyCode.A);
+        SetKeyInput(EventType.Track_2, KeyCode.S);
+        SetKeyInput(EventType.Track_3, KeyCode.K);
+        SetKeyInput(EventType.Track_4, KeyCode.L);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isCheckInput) GetKeyInput(checkCallback);
         if (!isRunning) return;
-        if (Input.anyKeyDown/* && StartGame != null*/)
+        if (Input.anyKeyDown && StartGame != null)
         {
             //StartGame += () => { StartGame = null; };
             //StartGame?.Invoke();
             EventBus.Instance.TriggerEvent(EventType.StartGame);
         }
         KeyInput();
+    }
+    public void SetKeyInput(EventType eventType,KeyCode key)
+    {
+        if (keyInputDic.ContainsKey(eventType)) keyInputDic[eventType] = key;
+        else keyInputDic.Add(eventType, key);
+    }
+    public void RemoveKeyInput(EventType eventType)
+    {
+        if(keyInputDic.ContainsKey(eventType)) keyInputDic.Remove(eventType);
+    }
+    public void SetKeyInputDic(Dictionary<EventType,KeyCode> keyInputDic)
+    {
+        if (keyInputDic == null)
+        {
+            Debug.LogError("按键映射字典不能为空");
+            return;
+        }
+        this.keyInputDic = new Dictionary<EventType, KeyCode>(keyInputDic);
     }
     public void StartInput()
     {
@@ -62,37 +87,56 @@ public class InputManager : MonoBehaviour
             //PauseGame?.Invoke(); 
             EventBus.Instance.TriggerEvent(EventType.PauseGame);
         };
+        StartGame += () => { EventBus.Instance.TriggerEvent(EventType.StartGame); };
         isRunning = true;
     }
     public void StopInput()
     {
         UIManager.Instance.HideUI<GamePanel>();
+        StartGame = null;
         isRunning = false;
+    }
+    public void StartCheck(UnityAction<KeyCode> action)
+    {
+        checkCallback = action;
+        StartCoroutine(CheckDelay());
+    }
+    private IEnumerator CheckDelay()
+    {
+        yield return null;
+        isCheckInput = true;
+    }
+    public void StopCheck()
+    {
+        isCheckInput = false;
+        checkCallback = null;
+    }
+    private void GetKeyInput(UnityAction<KeyCode> callback)
+    {
+        Array keycods = Enum.GetValues(typeof(KeyCode));
+        foreach (KeyCode key in keycods)
+        {
+            if (Input.GetKeyDown(key))
+            {
+                callback?.Invoke(key);
+                break;
+            }
+        }
     }
     private void KeyInput()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) 
-            EventBus.Instance.TriggerEvent(EventType.PauseGame);
-
-        if (Input.GetKeyDown(KeyCode.A))
-            EventBus.Instance.TriggerEvent(EventType.Track_1_Down);
-        if (Input.GetKeyUp(KeyCode.A))
-            EventBus.Instance.TriggerEvent(EventType.Track_1_Up);
-
-        if (Input.GetKeyDown(KeyCode.S))
-            EventBus.Instance.TriggerEvent(EventType.Track_2_Down);
-        if (Input.GetKeyUp(KeyCode.S))
-            EventBus.Instance.TriggerEvent(EventType.Track_2_Up);
-
-        if (Input.GetKeyDown(KeyCode.K))
-            EventBus.Instance.TriggerEvent(EventType.Track_3_Down);
-        if (Input.GetKeyUp(KeyCode.K))
-            EventBus.Instance.TriggerEvent(EventType.Track_3_Up);
-
-        if (Input.GetKeyDown(KeyCode.L))
-            EventBus.Instance.TriggerEvent(EventType.Track_4_Down);
-        if (Input.GetKeyUp(KeyCode.L))
-            EventBus.Instance.TriggerEvent(EventType.Track_4_Up);
+        foreach(var item in keyInputDic)
+        {
+            KeyInputUnit(item.Key, item.Value);
+        }
+    }
+    private void KeyInputUnit(EventType eventType, KeyCode key)
+    {
+        KeyInputType inputType = KeyInputType.None;
+        if (Input.GetKeyDown(key)) inputType = KeyInputType.Down;
+        else if (Input.GetKeyUp(key)) inputType = KeyInputType.Up;
+        if(inputType == KeyInputType.None) return;
+        EventBus.Instance.TriggerEvent<KeyInputType>(eventType, inputType);
     }
     private void ScreenInputDown(GameObject obj)
     {
@@ -112,8 +156,14 @@ public class InputManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        //StartGame = null;
+        StartGame = null;
         //PauseGame = null;
         UIManager.Instance.HideUI<GamePanel>();
     }
+}
+public enum KeyInputType
+{
+    None,
+    Down,
+    Up,
 }
