@@ -19,14 +19,14 @@ public class InputManager : MonoBehaviour
     }
     public event UnityAction StartGame;
     public event UnityAction PauseGame;
-    public event UnityAction TrackDown_1;
-    public event UnityAction TrackUp_1;
-    public event UnityAction TrackDown_2;
-    public event UnityAction TrackUp_2;
-    public event UnityAction TrackDown_3;
-    public event UnityAction TrackUp_3;
-    public event UnityAction TrackDown_4;
-    public event UnityAction TrackUp_4;
+    //public event UnityAction TrackDown_1;
+    //public event UnityAction TrackUp_1;
+    //public event UnityAction TrackDown_2;
+    //public event UnityAction TrackUp_2;
+    //public event UnityAction TrackDown_3;
+    //public event UnityAction TrackUp_3;
+    //public event UnityAction TrackDown_4;
+    //public event UnityAction TrackUp_4;
     public event UnityAction<Track> ScreenInputTrackDown;
     public event UnityAction<Track> ScreenInputTrackUp;
     private GamePanel gamePanel;
@@ -54,24 +54,32 @@ public class InputManager : MonoBehaviour
     private void KeyInput()
     {
         if (Input.GetKeyDown(KeyCode.A))
-            TrackDown_1?.Invoke();
+            //TrackDown_1?.Invoke();
+            EventBus.Instance.TriggerEvent(EventType.Track_1_Down);
         if (Input.GetKeyUp(KeyCode.A))
-            TrackUp_1?.Invoke();
+            //TrackUp_1?.Invoke();
+            EventBus.Instance.TriggerEvent(EventType.Track_1_Up);
 
         if (Input.GetKeyDown(KeyCode.S))
-            TrackDown_2?.Invoke();
+            //TrackDown_2?.Invoke();
+            EventBus.Instance.TriggerEvent(EventType.Track_2_Down);
         if (Input.GetKeyUp(KeyCode.S))
-            TrackUp_2?.Invoke();
+            //TrackUp_2?.Invoke();
+            EventBus.Instance.TriggerEvent(EventType.Track_2_Up);
 
         if (Input.GetKeyDown(KeyCode.K))
-            TrackDown_3?.Invoke();
+            //TrackDown_3?.Invoke();
+            EventBus.Instance.TriggerEvent(EventType.Track_3_Down);
         if (Input.GetKeyUp(KeyCode.K))
-            TrackUp_3?.Invoke();
+            //TrackUp_3?.Invoke();
+            EventBus.Instance.TriggerEvent(EventType.Track_3_Up);
 
         if (Input.GetKeyDown(KeyCode.L))
-            TrackDown_4?.Invoke();
+            //TrackDown_4?.Invoke();
+            EventBus.Instance.TriggerEvent(EventType.Track_4_Down);
         if (Input.GetKeyUp(KeyCode.L))
-            TrackUp_4?.Invoke();
+            //TrackUp_4?.Invoke();
+            EventBus.Instance.TriggerEvent(EventType.Track_4_Up);
     }
     private void ScreenInputDown(GameObject obj)
     {
