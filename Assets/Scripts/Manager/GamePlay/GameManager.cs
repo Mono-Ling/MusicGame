@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
         _instance = this;
         //DontDestroyOnLoad(gameObject);
     }
-    public Queue<UnitData> unitDataQueue = new Queue<UnitData>();
+    //public Queue<UnitData> unitDataQueue = new Queue<UnitData>();
     public float moveTime = 2;
     public double currentTime {  get; private set; }
     public int levelIndex;
@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     private Queue<KeyframeData> keyframeDataQueue = new Queue<KeyframeData>();
     private float maxMoveTime = 2;
     private AudioClip audioClip;
+    private WaitForDSPTime waitTime = new(default);
     //private UnityAction StartGame;
     // Start is called before the first frame update
     void Start()
@@ -43,10 +44,10 @@ public class GameManager : MonoBehaviour
             Debug.LogError("音游单位数据列表为空");
             return;
         }
-        foreach (var unitData in unitDataList)
-        {
-            unitDataQueue.Enqueue(unitData);
-        }
+        //foreach (var unitData in unitDataList)
+        //{
+        //    unitDataQueue.Enqueue(unitData);
+        //}
         //source = GetComponent<AudioSource>();
         //if (source == null)
         //{
@@ -90,21 +91,52 @@ public class GameManager : MonoBehaviour
     {
         currentTime = GameTimeManager.Instance.GetGameTime();
     }
-    IEnumerator UpdateMusicGameUnit()
+    //IEnumerator UpdateMusicGameUnit()
+    //{
+    //    UnitData firstUnitData = unitDataQueue.Peek();
+    //    firstUnitData.SetStartTime(moveTime);
+    //    waitTime.WaitForTime(firstUnitData.startTime);
+    //    yield return waitTime; //new WaitForDSPTime(firstUnitData.startTime);
+    //    while (unitDataQueue.Count > 0)
+    //    {
+    //        UnitData unitData = unitDataQueue.Dequeue();
+    //        //unitData.SetStartTime(moveTime);
+    //        UnitManager.Instance.CreateUnit(unitData);
+    //        if (unitDataQueue.Count == 0) break;
+    //        UnitData nextUnit = unitDataQueue.Peek();
+    //        nextUnit.SetStartTime(moveTime);
+    //        float timeToNextUnit = nextUnit.startTime - (float)currentTime;
+    //        waitTime.WaitForTime(timeToNextUnit);
+    //        yield return waitTime; //new WaitForDSPTime(timeToNextUnit);
+    //    }
+    //    Debug.Log("协程结束");
+    //}
+    IEnumerator UpdateUnit()
     {
-        UnitData firstUnitData = unitDataQueue.Peek();
-        firstUnitData.SetStartTime(moveTime);
-        yield return new WaitForDSPTime(firstUnitData.startTime);
-        while (unitDataQueue.Count > 0)
+        if(unitDataList == null || unitDataList.Count == 0)
         {
-            UnitData unitData = unitDataQueue.Dequeue();
-            //unitData.SetStartTime(moveTime);
+            Debug.LogError("音游单位数据列表为空");
+            yield break;
+        }
+        UnitData firstUnit = unitDataList[0];
+        firstUnit.SetStartTime(moveTime);
+        unitDataList[0] = firstUnit;
+        float delayTime = unitDataList[0].startTime;
+        for (int i = 0; i < unitDataList.Count; i++)
+        {
+            waitTime.WaitForTime(delayTime);
+            yield return waitTime;
+            UnitData unitData = unitDataList[i];
             UnitManager.Instance.CreateUnit(unitData);
-            if (unitDataQueue.Count == 0) break;
-            UnitData nextUnit = unitDataQueue.Peek();
-            nextUnit.SetStartTime(moveTime);
-            float timeToNextUnit = nextUnit.startTime - (float)currentTime;
-            yield return new WaitForDSPTime(timeToNextUnit);
+            if(i < unitDataList.Count - 1)
+            {
+                UnitData nextUnitData = unitDataList[i + 1];
+                nextUnitData.SetStartTime(moveTime);
+                unitDataList[i + 1] = nextUnitData;
+
+                delayTime = nextUnitData.startTime - (float)currentTime;
+            }
+            else break;
         }
         Debug.Log("协程结束");
     }
@@ -122,7 +154,7 @@ public class GameManager : MonoBehaviour
     }
     private void StartGamePlay()
     {
-        StartCoroutine(UpdateMusicGameUnit());
+        StartCoroutine(UpdateUnit());
         //source.Play();
         AudioManager.Instance.PlayMusic();
         GameTimeManager.Instance.PauseGame(false);

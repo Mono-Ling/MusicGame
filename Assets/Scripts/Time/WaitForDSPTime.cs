@@ -14,4 +14,8 @@ public class WaitForDSPTime : CustomYieldInstruction
     {
         get { return AudioSettings.dspTime < targetTime; }
     }
+    public void WaitForTime(double seconds)
+    {
+        targetTime = AudioSettings.dspTime + seconds;
+    }
 }

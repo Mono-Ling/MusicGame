@@ -54,7 +54,7 @@ public class UnitManager : MonoBehaviour
             Unit unit = tracks[i].actionUnits[0];
             if (unit == null || time - unit.unitHitTime > window)
             {
-                unit.UnitMiss(() => { unit.DestoryUnit(); });
+                unit.UnitMiss(/*() => { unit.DestoryUnit(); }*/);//miss回调函数中已添加销毁对象
                 tracks[i].actionUnits.RemoveAt(0);
 
                 DisplayResultManager.Instance.GetMissResult();
