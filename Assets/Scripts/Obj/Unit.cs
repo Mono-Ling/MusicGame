@@ -35,7 +35,7 @@ public abstract class Unit : MonoBehaviour,IPoolItem
     [Header("音符类型")]
     public UnitType type = UnitType.None;
     public UnitState state {  get; protected set; }
-    //public ExtendType extendType { get; set; } = ExtendType.Extend;
+    public ExtendType extendType { get; set; } = ExtendType.Extend;
 
     [Header("着色器")]
     public Shader shader;
@@ -144,5 +144,5 @@ public abstract class Unit : MonoBehaviour,IPoolItem
         Reset?.Invoke();
         Reset = null;
     }
-    //public int GetMaxNum() { return maxNum; }
+    public int GetMaxNum() { return maxNum; }
 }

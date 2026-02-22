@@ -8,7 +8,7 @@ public class WaveEffObj : MonoBehaviour,IPoolItem
     public int maxNum = 4;
     public float delayTime = 0.5f;
 
-    //public ExtendType extendType { get; set; } = ExtendType.Extend;
+    public ExtendType extendType { get; set; } = ExtendType.Extend;
 
     public event UnityAction Reset;
     public void Init()

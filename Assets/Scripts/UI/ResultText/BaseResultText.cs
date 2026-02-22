@@ -17,7 +17,7 @@ public abstract class BaseResultText : BaseUI,IPoolItem
     protected double currentTime;
     protected Vector3 startScale;
 
-    //public ExtendType extendType { get; set; } = ExtendType.Reuse;
+    public ExtendType extendType { get; set; } = ExtendType.Reuse;
 
     public void Init()
     {
@@ -65,7 +65,7 @@ public abstract class BaseResultText : BaseUI,IPoolItem
             hideCallback = null;
             return;
         }
-        float t = (float)((currentTime - startTime) / showTime);
+        float t = (float)((currentTime - startTime) / hideTime);
         t = Mathf.Clamp01(t);
         canvasGroup.alpha = Mathf.Lerp(1, 0, t);
         transform.localScale = Vector3.Lerp(startScale, minScale, t);
