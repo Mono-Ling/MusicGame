@@ -66,23 +66,26 @@ public class SettingManager
         {
             SetUseBloom(value);
         }));
-        foreach(var item in settingData.keySetting)
+        if (Platform.IsPCPlatform())
         {
-            SettingInfo info = new SettingInfo();
-            info.title = item.Key.ToString();
-            info.infoText = item.Value.ToString();
-            info.callback = () =>
+            foreach (var item in settingData.keySetting)
             {
-                ChangeKey(item.Key,(key)=>
+                SettingInfo info = new SettingInfo();
+                info.title = item.Key.ToString();
+                info.infoText = item.Value.ToString();
+                info.callback = () =>
                 {
-                    info.infoText = key.ToString();
-                    info.updateText?.Invoke();
-                });
-                //if (InputManager.Instance.isCheckInput) 
-                //else info.infoText = item.Value.ToString();
-                info.infoText = "«Î ‰»Î";
-            };
-            infos.Enqueue(info);
+                    ChangeKey(item.Key, (key) =>
+                    {
+                        info.infoText = key.ToString();
+                        info.updateText?.Invoke();
+                    });
+                    //if (InputManager.Instance.isCheckInput) 
+                    //else info.infoText = item.Value.ToString();
+                    info.infoText = "«Î ‰»Î";
+                };
+                infos.Enqueue(info);
+            }
         }
         UIManager.Instance.ShowUI<SettingPanel>();
         SettingPanel panel = UIManager.Instance.GetUI<SettingPanel>();
