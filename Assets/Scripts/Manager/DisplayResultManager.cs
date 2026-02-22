@@ -24,8 +24,8 @@ public class DisplayResultManager : MonoBehaviour
     public float perfectWindow;
     public float greatWindow;
     public float goodWindow;
-    private bool isTaskRunning = false;
-    private BaseResultText[] texts;
+    public float fastScale;
+    private List<BaseResultText> textList = new List<BaseResultText>();
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +33,6 @@ public class DisplayResultManager : MonoBehaviour
         perfectWindow = spetTime;
         greatWindow = spetTime * 2;
         goodWindow = spetTime * 3;
-        texts = new BaseResultText[3];
     }
 
     // Update is called once per frame
@@ -42,60 +41,33 @@ public class DisplayResultManager : MonoBehaviour
     }
     public void AddTask(float time)
     {
-        if (isTaskRunning)
-        {
-            if (texts[0] != null)
-            {
-                UIManager.Instance.HideUI<PerfectText>(null, false);
-                texts[0] = null;
-            }
-            if(texts[1] != null)
-            {
-                UIManager.Instance.HideUI<GreatText>(null, false);
-                texts[1] = null;
-            }
-            if (texts[2] != null)
-            {
-                UIManager.Instance.HideUI<GoodText>(null, false);
-                texts[2] = null;
-            }
-        }
         time = Mathf.Abs(time);
-        if (time < perfectWindow)
+        BaseResultText newText = null;
+
+        if (time < perfectWindow) newText = UIManager.Instance.DontBufferShowUI<PerfectText>(EndShow);
+        else if (time < greatWindow) newText = UIManager.Instance.DontBufferShowUI<GreatText>(EndShow);
+        else newText = UIManager.Instance.DontBufferShowUI<GoodText>(EndShow);
+
+        if (newText == null) return;
+        UpdateList(textList);
+        textList.Add(newText);
+    }
+    private void UpdateList(List<BaseResultText> list)
+    {
+        if (list == null) return;
+        for (int i = 0; i < list.Count; i++)
         {
-            UIManager.Instance.ShowUI<PerfectText>(() => {
-                UIManager.Instance.HideUI<PerfectText>(() =>
-                {
-                    isTaskRunning = false;
-                    texts[0] = null;
-                });
-            });
-            texts[0] = UIManager.Instance.GetUI<PerfectText>();
-            isTaskRunning = true;
+            list[i].Fast(fastScale);
         }
-        else if (time < greatWindow)
+    }
+    private void EndShow()
+    {
+        BaseResultText text = null;
+        if (textList.Count > 0)
         {
-            UIManager.Instance.ShowUI<GreatText>(() => {
-                UIManager.Instance.HideUI<GreatText>(() =>
-                {
-                    isTaskRunning = false;
-                    texts[1] = null;
-                });
-            });
-            texts[1] = UIManager.Instance.GetUI<GreatText>();
-            isTaskRunning= true;
+            text = textList[0];
+            textList.RemoveAt(0);
         }
-        else
-        {
-            UIManager.Instance.ShowUI<GoodText>(() => {
-                UIManager.Instance.HideUI<GoodText>(() =>
-                {
-                    isTaskRunning = false;
-                    texts[2] = null;
-                });
-            });
-            texts[2] = UIManager.Instance.GetUI<GoodText>();
-            isTaskRunning = true;
-        }
+        UIManager.Instance.DontBufferHideUI(text);
     }
 }

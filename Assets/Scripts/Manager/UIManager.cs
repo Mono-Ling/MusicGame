@@ -10,6 +10,7 @@ public class UIManager
     public static UIManager Instance => instance ?? (instance = new UIManager());
     //private const string canvasPath = "UI/Canvas";
     private Transform canvasTransform;
+    private Transform tempCanvasTransform;
     private Dictionary<string,BaseUI> uiDic = new Dictionary<string,BaseUI>();
     private UIManager() 
     {
@@ -22,6 +23,15 @@ public class UIManager
         }
         canvasTransform = canvas.transform;
         GameObject.DontDestroyOnLoad(canvas);
+        canvasPath = Path.Combine("UI", "TempUICanvas");
+        var tempCanvas = GameObject.Instantiate(Resources.Load<GameObject>(canvasPath));
+        if (canvas == null)
+        {
+            Debug.LogError("TempCanvas加载失败");
+            return;
+        }
+        tempCanvasTransform = tempCanvas.transform;
+        GameObject.DontDestroyOnLoad (tempCanvas);
     }
     /// <summary>
     /// 获取UI（预设体名须与类名一至）
@@ -87,5 +97,28 @@ public class UIManager
             //Debug.Log($"移除{name}");
         };
         uiDic[name].Hide(callback,isAnimation);
+    }
+    public T DontBufferShowUI<T>(UnityAction callback = null) where T : BaseUI
+    {
+        string name = typeof(T).Name;
+        string filePath = Path.Combine("UI", name);
+        GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(filePath), tempCanvasTransform, false);
+        if (obj == null)
+        {
+            Debug.LogError($"{name}打开失败");
+            return null;
+        }
+        T ui = obj.GetComponent<T>();
+        ui.Show(callback);
+        return ui;
+    }
+    public void DontBufferHideUI(BaseUI ui,UnityAction callback = null, bool isAnimation = true)
+    {
+        if(ui == null) return;
+        callback += () =>
+        {
+            GameObject.Destroy(ui.gameObject);
+        };
+        ui.Hide(callback,isAnimation);
     }
 }

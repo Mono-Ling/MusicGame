@@ -89,6 +89,6 @@ Material:
     - _Color: {r: 0.05856024, g: 0.1383647, b: 0.004786183, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _MaxColor: {r: 0.2814173, g: 0.8616352, b: 0.04064306, a: 0}
+    - _MaxColor: {r: 0.4577662, g: 0.7735849, b: 0.3235433, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

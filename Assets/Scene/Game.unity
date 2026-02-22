@@ -803,6 +803,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bloomMaxValue: 1
+  bloom: {fileID: 721644268}
 --- !u!114 &1300233712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -818,6 +819,7 @@ MonoBehaviour:
   perfectWindow: 0
   greatWindow: 0
   goodWindow: 0
+  fastScale: 0.4
 --- !u!114 &1300233713
 MonoBehaviour:
   m_ObjectHideFlags: 0
