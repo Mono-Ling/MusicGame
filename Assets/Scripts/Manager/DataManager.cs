@@ -106,21 +106,20 @@ public class DataManager
         }
         return unitDataList.unitList;
     }
-    public List<EffectKeyframeData> GetEffectKeyframeList(LevelData levelData)
+    public List<KeyframeData> GetKeyframeList(string keyframePath)
     {
-        if(levelData == null) return null;
-        if (levelData.effectDataPath == null) return null;
-        EffectDataList effect = LoadData<EffectDataList>($"{levelData.effectDataPath}");
-        if (effect == null)
+        if(keyframePath == null) return null;
+        KeyframeDataList keyframe = LoadData<KeyframeDataList>($"{keyframePath}");
+        if (keyframe == null)
         {
             Debug.LogError("加载失败");
         }
         else
         {
             Debug.Log("加载成功");
-            Debug.Log($"特效关键帧数据数量：{effect.keyframeList.Count}");
+            Debug.Log($"关键帧数据数量：{keyframe.keyframeList.Count}");
         }
-        return effect.keyframeList;
+        return keyframe.keyframeList;
     }
 }
 public class  MusicUnitList
@@ -131,7 +130,7 @@ public class LevelDataList
 {
     public List<LevelData> levelList;
 }
-public class EffectDataList
+public class KeyframeDataList
 {
-    public List<EffectKeyframeData> keyframeList;
+    public List<KeyframeData> keyframeList;
 }

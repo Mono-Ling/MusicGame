@@ -26,11 +26,16 @@ public class GameManager : MonoBehaviour
     private List<UnitData> unitDataList;
     private AudioSource source;
     private float time;
+    private List<KeyframeData> keyframeDatas;
+    private Queue<KeyframeData> keyframeDataQueue = new Queue<KeyframeData>();
+    private float maxMoveTime = 2;
     //private UnityAction StartGame;
     // Start is called before the first frame update
     void Start()
     {
         unitDataList = SelectLevelManager.Instance.GetLevelUnitDatas();
+        keyframeDatas = SelectLevelManager.Instance.GetUnitMoveTimeKeyframeDatas();
+        maxMoveTime = SelectLevelManager.Instance.GetUnitMaxMoveTime();
         time = SelectLevelManager.Instance.GetTime();
         if(unitDataList == null || unitDataList.Count == 0)
         {
@@ -56,6 +61,21 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.ShowUI<InitGame>();
         InputManager.Instance.StartGame += ()=> UIManager.Instance.HideUI<InitGame>(StartGame);
         InputManager.Instance.PauseGame += () => PauseGame();
+
+        if (keyframeDatas == null || keyframeDatas.Count == 0)
+        {
+            Debug.Log("音符移动时间配置文件为空");
+            return;
+        }
+        foreach (var keyframeData in keyframeDatas)
+        {
+            keyframeDataQueue.Enqueue(keyframeData);
+        }
+        if (keyframeDataQueue != null && keyframeDataQueue.Count > 0)
+        {
+            InputManager.Instance.StartGame += () => { StartCoroutine(UpdateMoveTime()); };
+        }
+        else Debug.LogWarning($"{this}音符移动速度插值协程初始化异常");
     }
 
     // Update is called once per frame
@@ -101,5 +121,45 @@ public class GameManager : MonoBehaviour
         GameTimeManager.Instance.PauseGame(isPlaying);
         isPlaying = !isPlaying;
         print("暂停");
+    }
+    IEnumerator UpdateMoveTime()
+    {
+        float currentValue = 0f;
+        //Debug.Log($"{this}协程开启");
+        while (keyframeDataQueue.Count > 0)
+        {
+            float startTime = (float)GameManager.Instance.currentTime;
+            float endTime = keyframeDataQueue.Peek().time;
+            float endValue = keyframeDataQueue.Peek().value;
+            float startValue = currentValue;
+            if (Mathf.Approximately(endTime, startTime))
+            {
+                currentValue = endValue;
+                //bloom.LThreshold = 1 - Mathf.SmoothStep(currentValue, maxSpeed, currentValue * maxSpeed);
+                moveTime = maxMoveTime - maxMoveTime * currentValue;
+                keyframeDataQueue.Dequeue();
+                continue;
+            }
+            while (true)
+            {
+                float currentTime = (float)GameManager.Instance.currentTime;
+                if (currentTime >= endTime)
+                {
+                    currentValue = endValue;
+                    //float clampedValue = Mathf.Clamp(currentValue, 0, bloomMaxValue);
+                    //bloom.LThreshold = 1 - Mathf.SmoothStep(currentValue, maxSpeed, currentValue * maxSpeed);
+                    moveTime = maxMoveTime - maxMoveTime * currentValue;
+                    break;
+                }
+                float t = (currentTime - startTime) / (endTime - startTime);
+                t = Mathf.Clamp01(t);
+                currentValue = Mathf.Lerp(startValue, endValue, t);
+                //bloom.LThreshold = 1 - Mathf.SmoothStep(currentValue, maxSpeed, currentValue * maxSpeed);
+                moveTime = maxMoveTime - maxMoveTime * currentValue;
+                yield return null;
+            }
+            keyframeDataQueue.Dequeue();
+        }
+        Debug.Log($"{this}协程结束");
     }
 }

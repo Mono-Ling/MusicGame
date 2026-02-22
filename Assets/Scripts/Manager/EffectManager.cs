@@ -17,8 +17,8 @@ public class EffectManager : MonoBehaviour
     }
     public float bloomMaxValue;
     private Bloom bloom;
-    private List<EffectKeyframeData> keyframDatas;
-    private Queue<EffectKeyframeData> keyframeDataQueue = new Queue<EffectKeyframeData>();
+    private List<KeyframeData> keyframDatas;
+    private Queue<KeyframeData> keyframeDataQueue = new Queue<KeyframeData>();
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +36,7 @@ public class EffectManager : MonoBehaviour
             enabled = false;
             return;
         }
-        foreach(EffectKeyframeData data in keyframDatas)
+        foreach(KeyframeData data in keyframDatas)
         {
             keyframeDataQueue.Enqueue(data);
         }

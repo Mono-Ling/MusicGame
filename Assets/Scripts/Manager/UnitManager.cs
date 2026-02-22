@@ -61,40 +61,7 @@ public class UnitManager : MonoBehaviour
             }
         }
     }
-    /// <summary>
-    /// 检测输入
-    /// </summary>
-    /// <param name="time"></param>
-    /*private void CheckInput(float time)
-    {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    Vector2 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        //    Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
-        //    if (hit != null && hit.CompareTag("Track"))
-        //    {
-        //        Track track = hit.gameObject.GetComponent<Track>();
-        //        Debug.Log($"点击了轨道{track.id}");
-        //        Unit unit = track.ComparInputUnit(time,window);
-        //        if (unit != null) unit.HitUnit(time, () => { unit.DestoryUnit(); });
-        //        if(unit != null&&unit.type == UnitType.Hold) track.holdingUnit = unit;
-        //    }
-        //}
-        //if (Input.GetMouseButtonUp(0))
-        //{
-        //    Vector2 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        //    Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
-        //    if (hit != null && hit.CompareTag("Track"))
-        //    {
-        //        Track track = hit.gameObject.GetComponent<Track>();
-        //        if(track.holdingUnit != null)
-        //        {
-        //            track.holdingUnit.HitUnitEnd(time);
-        //            track.holdingUnit = null;
-        //        }
-        //    }
-        //}
-    }*/
+
     private void InputDown(Track track,float time)
     {
         Unit unit = track.ComparInputUnit(time, window);

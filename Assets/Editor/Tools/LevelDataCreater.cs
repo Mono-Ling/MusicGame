@@ -106,6 +106,10 @@ public class LevelDataCreater : EditorWindow
         EditorGUILayout.Space();
         level.effectDataPath = EditorGUILayout.TextField("特效配置文件路径", level.effectDataPath);
         EditorGUILayout.Space();
+        level.moveTimeDataPath = EditorGUILayout.TextField("音符移动时间配置文件路径", level.moveTimeDataPath);
+        EditorGUILayout.Space();
+        level.maxMoveTime = EditorGUILayout.FloatField("音符移动最长时间", level.maxMoveTime);
+        EditorGUILayout.Space();
         level.time = EditorGUILayout.FloatField("时长",level.time);
         EditorGUILayout.Space();
         level.level = EditorGUILayout.IntField("等级",level.level);

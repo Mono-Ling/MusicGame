@@ -5,7 +5,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-public class EffectDataCreater : EditorWindow
+public class KeyframeDataCreater : EditorWindow
 {
     public enum Type
     {
@@ -13,13 +13,13 @@ public class EffectDataCreater : EditorWindow
         Change,
         Create,
     }
-    [MenuItem("工具/特效关键帧文件生成工具")]
+    [MenuItem("工具/关键帧文件生成工具")]
     private static void ShowWindow()
     {
-        EffectDataCreater window = GetWindow<EffectDataCreater>("特效关键帧文件生成工具");
+        KeyframeDataCreater window = GetWindow<KeyframeDataCreater>("关键帧文件生成工具");
         window.Show();
     }
-    private List<EffectKeyframeData> datas;
+    private List<KeyframeData> datas;
     private Type type;
     private string path;
     private int removeIndex = 0;
@@ -56,11 +56,11 @@ public class EffectDataCreater : EditorWindow
         if (GUILayout.Button("添加"))
         {
             if (addIndex >=datas.Count - 1)
-                datas.Add(new EffectKeyframeData());
+                datas.Add(new KeyframeData());
             else if (addIndex >= 0)
-                datas.Insert(addIndex, new EffectKeyframeData());
+                datas.Insert(addIndex, new KeyframeData());
             else
-                datas.Insert(0, new EffectKeyframeData());
+                datas.Insert(0, new KeyframeData());
             addIndex = datas.Count - 1;
             removeIndex = datas.Count - 1;
         }
@@ -77,7 +77,7 @@ public class EffectDataCreater : EditorWindow
             Save(datas);
         EditorGUILayout.EndHorizontal();
     }
-    private List<EffectKeyframeData> GetDataList(List<EffectKeyframeData> datas)
+    private List<KeyframeData> GetDataList(List<KeyframeData> datas)
     {
         if (datas != null) return datas;
         switch (type)
@@ -88,7 +88,7 @@ public class EffectDataCreater : EditorWindow
                     try
                     {
                         string json = File.ReadAllText(Application.streamingAssetsPath + $"/{path}.json");
-                        datas = JsonMapper.ToObject<EffectDataList>(json).keyframeList;
+                        datas = JsonMapper.ToObject<KeyframeDataList>(json).keyframeList;
                     }
                     catch
                     {
@@ -98,13 +98,13 @@ public class EffectDataCreater : EditorWindow
                 else EditorGUILayout.HelpBox("路径为空", MessageType.Warning);
                 break;
             case Type.Create:
-                datas = new List<EffectKeyframeData>();
+                datas = new List<KeyframeData>();
                 break;
         }
         removeIndex = datas.Count - 1;
         return datas;
     }
-    private void DisplayEffectData(int index,EffectKeyframeData data)
+    private void DisplayEffectData(int index,KeyframeData data)
     {
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField($"索引{index}");
@@ -114,9 +114,9 @@ public class EffectDataCreater : EditorWindow
         data.value = EditorGUILayout.Slider("强度", data.value, 0, 1);
         GUILayout.EndHorizontal();
     }
-    private void Save(List<EffectKeyframeData> datas)
+    private void Save(List<KeyframeData> datas)
     {
-        EffectDataList list = new EffectDataList();
+        KeyframeDataList list = new KeyframeDataList();
         list.keyframeList = datas;
         string json = JsonMapper.ToJson(list);
         File.WriteAllText(Application.streamingAssetsPath + $"/{path}.json", json);

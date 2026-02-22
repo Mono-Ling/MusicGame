@@ -10,7 +10,8 @@ public class SelectLevelManager
     public LevelDataList levels { get; private set; }
     private List<UnitData> unitList;
     private AudioClip audio;
-    private List<EffectKeyframeData> effectList;
+    private List<KeyframeData> effectList;
+    private List<KeyframeData> moeTimeList;
     private Sprite coverSprite;
     private string description;
     private int levelIndex;
@@ -35,6 +36,7 @@ public class SelectLevelManager
         levelIndex = index;
         unitList = null;
         effectList = null;
+        moeTimeList = null;
         audio = null;
         coverSprite = null;
         description = null;
@@ -59,13 +61,25 @@ public class SelectLevelManager
         if (audio == null) Debug.LogError($"路径{path}不存在");
         return audio;
     }
-    public List<EffectKeyframeData> GetEffectKeyframeDatas()
+    public List<KeyframeData> GetEffectKeyframeDatas()
     {
         if(effectList != null) return effectList;
         string path = levels.levelList[levelIndex].effectDataPath;
-        effectList = DataManager.Instance.GetEffectKeyframeList(levels.levelList[levelIndex]);
+        effectList = DataManager.Instance.GetKeyframeList(path);
         if(effectList == null) Debug.Log("该场景不存在后处理");
         return effectList;
+    }
+    public List<KeyframeData> GetUnitMoveTimeKeyframeDatas()
+    {
+        if (moeTimeList != null) return moeTimeList;
+        string path = levels.levelList[levelIndex].moveTimeDataPath;
+        moeTimeList = DataManager.Instance.GetKeyframeList(path);
+        if (moeTimeList == null) Debug.Log("该场景不存在音符移动变速");
+        return moeTimeList;
+    }
+    public float GetUnitMaxMoveTime()
+    {
+        return levels.levelList[levelIndex].maxMoveTime;
     }
     public Sprite GetCoverSprite()
     {
@@ -98,6 +112,7 @@ public class SelectLevelManager
         GetLevelMusicClip();
         GetLevelUnitDatas();
         GetEffectKeyframeDatas();
+        GetUnitMoveTimeKeyframeDatas();
     }
     public bool CheckLevelData()
     {
