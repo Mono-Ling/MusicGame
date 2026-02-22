@@ -22,5 +22,6 @@ public class UnitData
     public void SetStartTime(float moveTime)
     {
         startTime = hitTime - moveTime;
+        if(startTime <= 0) startTime = 0;
     }
 }

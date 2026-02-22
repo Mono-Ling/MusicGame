@@ -493,6 +493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveTime: 2
+  levelIndex: 1
 --- !u!4 &1300233706
 Transform:
   m_ObjectHideFlags: 0
@@ -530,7 +531,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 74bf3162b9b11d541afb2d09f36c2aa4, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5585805b1dfd0094d939e72f62bfca72, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -855,7 +856,7 @@ MonoBehaviour:
   - {fileID: 1812302826}
   - {fileID: 695042732}
   - {fileID: 1727946402}
-  window: 0.1
+  window: 0.15
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -55,32 +55,65 @@ public class UnitManager : MonoBehaviour
     /// <param name="time"></param>
     private void CheckInput(float time)
     {
-        if (Input.GetMouseButtonDown(0))
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    Vector2 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        //    Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
+        //    if (hit != null && hit.CompareTag("Track"))
+        //    {
+        //        Track track = hit.gameObject.GetComponent<Track>();
+        //        Debug.Log($"点击了轨道{track.id}");
+        //        Unit unit = track.ComparInputUnit(time,window);
+        //        if (unit != null) unit.HitUnit(time, () => { unit.DestoryUnit(); });
+        //        if(unit != null&&unit.type == UnitType.Hold) track.holdingUnit = unit;
+        //    }
+        //}
+        //if (Input.GetMouseButtonUp(0))
+        //{
+        //    Vector2 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        //    Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
+        //    if (hit != null && hit.CompareTag("Track"))
+        //    {
+        //        Track track = hit.gameObject.GetComponent<Track>();
+        //        if(track.holdingUnit != null)
+        //        {
+        //            track.holdingUnit.HitUnitEnd(time);
+        //            track.holdingUnit = null;
+        //        }
+        //    }
+        //}
+        if(Input.GetKeyDown(KeyCode.A))
+            InputDown(tracks[0],time);
+        if(Input.GetKeyUp(KeyCode.A))
+            InputUp(tracks[0],time);
+
+        if(Input.GetKeyDown(KeyCode.S))
+            InputDown(tracks[1],time);
+        if (Input.GetKeyUp(KeyCode.S))
+            InputUp(tracks[1],time);
+
+        if (Input.GetKeyDown(KeyCode.K))
+            InputDown(tracks[2], time);
+        if (Input.GetKeyUp(KeyCode.K))
+            InputUp(tracks[2], time);
+
+        if (Input.GetKeyDown(KeyCode.L))
+            InputDown(tracks[3], time);
+        if (Input.GetKeyUp(KeyCode.L))
+            InputUp(tracks[3], time);
+    }
+    private void InputDown(Track track,float time)
+    {
+        Unit unit = track.ComparInputUnit(time, window);
+        if (unit != null) unit.HitUnit(time, () => { unit.DestoryUnit(); });
+        if (unit != null && unit.type == UnitType.Hold) track.holdingUnit = unit;
+    }
+    private void InputUp(Track track,float time)
+    {
+        if (track.holdingUnit != null)
         {
-            Vector2 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
-            if (hit != null && hit.CompareTag("Track"))
-            {
-                Track track = hit.gameObject.GetComponent<Track>();
-                Debug.Log($"点击了轨道{track.id}");
-                Unit unit = track.ComparInputUnit(time,window);
-                if (unit != null) unit.HitUnit(time, () => { unit.DestoryUnit(); });
-                if(unit != null&&unit.type == UnitType.Hold) track.holdingUnit = unit;
-            }
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            Vector2 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
-            if (hit != null && hit.CompareTag("Track"))
-            {
-                Track track = hit.gameObject.GetComponent<Track>();
-                if(track.holdingUnit != null)
-                {
-                    track.holdingUnit.HitUnitEnd(time);
-                    track.holdingUnit = null;
-                }
-            }
+            track.holdingUnit.HitUnitEnd(time);
+            track.holdingUnit = null;
         }
     }
     public void CreateUnit(UnitData unitData,float moveTime = 2)

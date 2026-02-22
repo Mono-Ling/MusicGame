@@ -20,13 +20,14 @@ public class GameManager : MonoBehaviour
     public Queue<UnitData> unitDataQueue = new Queue<UnitData>();
     public float moveTime = 2;
     public float time {  get; private set; }
+    public int levelIndex;
     private bool musicPlaying = false;
     private List<UnitData> unitDataList;
     private AudioSource source;
     // Start is called before the first frame update
     void Start()
     {
-        unitDataList = DataManager.Instance.GetUnitList(0);
+        unitDataList = DataManager.Instance.GetUnitList(levelIndex);
         if(unitDataList == null || unitDataList.Count == 0)
         {
             Debug.LogError("音游单位数据列表为空");

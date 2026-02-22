@@ -49,7 +49,7 @@ public class UnitDataCreater : EditorWindow
             unitDatas.Add(new UnitData());
         EditorGUILayout.Space();
         removeIndex = EditorGUILayout.IntField("移除索引", removeIndex);
-        if (removeIndex < unitDatas.Count && unitDatas.Count >= 0 && GUILayout.Button("移除"))
+        if (removeIndex < unitDatas.Count && removeIndex >= 0 && GUILayout.Button("移除"))
         {
             unitDatas.RemoveAt(removeIndex);
             removeIndex = unitDatas.Count - 1;
@@ -111,7 +111,11 @@ public class UnitDataCreater : EditorWindow
                                                                             new int[] { 1, 2});
         EditorGUILayout.Space();
         if (unitData.unitType == 2)
-            unitData.duration = EditorGUILayout.FloatField("持续时间", unitData.duration);
+        {
+            float endTime = unitData.hitTime + unitData.duration;
+            endTime = EditorGUILayout.FloatField("结束时间", endTime);
+            unitData.duration = endTime - unitData.hitTime;
+        }
         EditorGUILayout.EndHorizontal();        
     }
     private void Save(List<UnitData> datas)

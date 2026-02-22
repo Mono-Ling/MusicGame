@@ -62,6 +62,7 @@ public class HoldUnit : Unit
         unitHitTime = time;
         state = UnitState.Miss;
         if(holdProgress < clipThreshold) callback?.Invoke();
+        UnitMiss(callback);
         Debug.Log($"ки©╙ак{this}");
     }
 }
