@@ -12,10 +12,11 @@ public class Main : MonoBehaviour
             {
                 UIManager.Instance.HideUI<BeginPanel>(() =>
                 {
-                    UIManager.Instance.ShowUI<PlayerWarningPanel>(() =>
-                    {
-                        UIManager.Instance.HideUI<PlayerWarningPanel>(Init);
-                    });
+                    //UIManager.Instance.ShowUI<PlayerWarningPanel>(() =>
+                    //{
+                    //    UIManager.Instance.HideUI<PlayerWarningPanel>(Init);
+                    //});
+                    Init();
                 });
             });
         else Init();

@@ -37,6 +37,7 @@ public class InputManager : MonoBehaviour
         gamePanel = UIManager.Instance.GetUI<GamePanel>();
         gamePanel.InputDown += ScreenInputDown;
         gamePanel.InputUp += ScreenInputUp;
+        gamePanel.InputPause += () => { PauseGame?.Invoke(); };
     }
 
     // Update is called once per frame

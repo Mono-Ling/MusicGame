@@ -162,4 +162,8 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log($"{this}Ð­³Ì½áÊø");
     }
+    public float GetWindowScale()
+    {
+        return Mathf.Clamp(moveTime/maxMoveTime, 0.2f, 1);
+    }
 }

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Editor/Tools/LevelDataCreater.cs.meta
 guid: 375ce35efebca204d915407c80953624
+========
+guid: 1dcf8f1b3e64b8e4eb47912be63420f0
+>>>>>>>> 添加暂停按钮，优化了判定时间窗口在变速过程中的缩放:Assets/Scripts/Data/KeyframeData.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

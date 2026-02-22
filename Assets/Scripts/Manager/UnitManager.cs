@@ -16,6 +16,7 @@ public class UnitManager : MonoBehaviour
         instance = this;
     }
     public List<Track> tracks = new List<Track>();
+    public float maxWindow = 0.15f;
     public float window = 1;
     private Camera mainCamera;
     private float time;
@@ -41,6 +42,7 @@ public class UnitManager : MonoBehaviour
     void Update()
     {
         time = (float)GameManager.Instance.currentTime;
+        window = maxWindow * GameManager.Instance.GetWindowScale();
         UpdateActionUnitList(time);
         //CheckInput(time);
     }
