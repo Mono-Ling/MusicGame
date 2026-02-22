@@ -46,6 +46,7 @@ public class MusicView : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (audioSource == null) audioSource = AudioManager.Instance.musicSource;
         if (audioSource == null) return;
         CalculateFrequencyBands();
         SmoothBands();

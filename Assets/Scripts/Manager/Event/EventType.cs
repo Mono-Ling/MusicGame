@@ -34,4 +34,9 @@ public enum EventType
     /// KeyInputType参数类型
     /// </summary>
     Track_4,
+
+    /// <summary>
+    /// SettingData参数类型
+    /// </summary>
+    Update_SettingData,
 }

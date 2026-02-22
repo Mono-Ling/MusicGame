@@ -1,9 +1,11 @@
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SettingItem : MonoBehaviour,IPoolItem
@@ -14,11 +16,10 @@ public class SettingItem : MonoBehaviour,IPoolItem
     public Slider sliderInfo;
     public Toggle toggleInfo;
     public BaseSettingInfo settingInfo;
-
     public ExtendType extendType { get; set; } = ExtendType.Extend;
-
     public event UnityAction Reset;
-    private void Start()
+    private Dictionary<Type, UIBehaviour> infoDic = new();
+    private void Awake()
     {
         if (title == null || butInfo == null ||
             sliderInfo == null || toggleInfo == null ||
@@ -26,7 +27,14 @@ public class SettingItem : MonoBehaviour,IPoolItem
         {
             Debug.LogError("´æÔÚ¿Õ¿Ø¼þ");
         }
+        infoDic.Add(typeof(ButtonSettingInfo), butInfo);
+        infoDic.Add(typeof(SliderSettingInfo), sliderInfo);
+        infoDic.Add(typeof(ToggleSettingInfo), toggleInfo);
     }
+    //private void Start()
+    //{
+        
+    //}
     public void Init()
     {
         if (settingInfo == null)
@@ -35,74 +43,64 @@ public class SettingItem : MonoBehaviour,IPoolItem
             return;
         }
         else title.text = settingInfo.title;
-        switch (settingInfo.type)
+        Type type = settingInfo.GetType();
+        infoDic[type].gameObject.SetActive(true);
+        BindEvent(type);
+        EventBus.Instance.AddListener(EventType.Update_SettingData, UpdateInfoDisplay);
+    }
+    private void BindEvent(Type type)
+    {
+        if(type == typeof(ButtonSettingInfo))
         {
-            case SettingInfoDisPlayType.Text_Button:
-                butInfo.gameObject.SetActive(true);
-                butInfo.onClick.AddListener(ButInfo);
-                UpdateButInfoText();
-                break;
-            case SettingInfoDisPlayType.Text_Slider:
-                sliderInfo.gameObject.SetActive(true);
-                sliderInfo.onValueChanged.AddListener(UpdateInfo<float>);
-                sliderInfo.value = InitInfo<float>();
-                break;
-            case SettingInfoDisPlayType.Text_Toggle:
-                toggleInfo.gameObject.SetActive(true);
-                toggleInfo.onValueChanged?.AddListener(UpdateInfo<bool>);
-                toggleInfo.isOn = InitInfo<bool>();
-                break;
+            butInfo.onClick.AddListener(()=>
+            {
+                settingInfo.OnValueChanged(null);
+                butInfoText.text = settingInfo.GetValue().ToString();
+            });
+        }
+        else if(type == typeof(SliderSettingInfo))
+        {
+            sliderInfo.onValueChanged.AddListener(value=>settingInfo.OnValueChanged(value));
+        }
+        else if (type == typeof(ToggleSettingInfo))
+        {
+            toggleInfo.onValueChanged.AddListener(value=> settingInfo.OnValueChanged(value));
         }
     }
-    private void ButInfo()
+    private void UpdateInfoDisplay()
     {
-        if (settingInfo is SettingInfo)
+        settingInfo.updateDisplay?.Invoke();
+        Type type = settingInfo.GetType();
+        if (type == typeof(ButtonSettingInfo))
         {
-            SettingInfo info = settingInfo as SettingInfo;
-            info.callback?.Invoke();
-            butInfoText.text = info.infoText;
-            info.updateText = UpdateButInfoText;
+            butInfoText.text = settingInfo.GetValue().ToString();
+        }
+        else if (type == typeof(SliderSettingInfo))
+        {
+            sliderInfo.value = (float)settingInfo.GetValue();
+        }
+        else if (type == typeof(ToggleSettingInfo))
+        {
+            toggleInfo.isOn = (bool)settingInfo.GetValue();
         }
     }
-    private void UpdateButInfoText()
+    private void ClearAction()
     {
-        if (settingInfo is SettingInfo)
-        {
-            SettingInfo info = settingInfo as SettingInfo;
-            butInfoText.text = info.infoText;
-        }
-    }
-    private T InitInfo<T>()
-    {
-        if (settingInfo is SettingInfo<T>)
-            return (settingInfo as SettingInfo<T>).value;
-        else
-            return default(T);
-    }
-    private void UpdateInfo<T>(T value)
-    {
-        if(settingInfo is SettingInfo<T>)
-            (settingInfo as SettingInfo<T>).callback?.Invoke(value);
+        EventBus.Instance.RemoveListener(EventType.Update_SettingData, UpdateInfoDisplay);
+        butInfo.onClick.RemoveAllListeners();
+        sliderInfo.onValueChanged.RemoveAllListeners();
+        toggleInfo.onValueChanged.RemoveAllListeners();
     }
     public void OnReset()
     {
-        if(settingInfo is SettingInfo) (settingInfo as SettingInfo).updateText = null;
+        settingInfo = null;
+        ClearAction();
         butInfo.gameObject.SetActive(false);
         sliderInfo.gameObject.SetActive(false);
         toggleInfo.gameObject.SetActive(false);
-        butInfo.onClick.RemoveAllListeners();
-        sliderInfo.onValueChanged.RemoveAllListeners();
-        toggleInfo.onValueChanged.RemoveAllListeners();
-        settingInfo = null;
-        Reset?.Invoke();
-        Reset = null;
     }
     private void OnDestroy()
     {
-        if (settingInfo is SettingInfo) (settingInfo as SettingInfo).updateText = null;
-        butInfo.onClick.RemoveAllListeners();
-        sliderInfo.onValueChanged.RemoveAllListeners();
-        toggleInfo.onValueChanged.RemoveAllListeners();
-        settingInfo = null;
+        ClearAction();
     }
 }

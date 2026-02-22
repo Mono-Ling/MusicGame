@@ -51,7 +51,8 @@ public class SelectLevelPanel : BaseUI
             //Application.Quit();
             UIManager.Instance.HideUI<SelectLevelPanel>(() =>
             {
-                SettingManager.Instance.StartSetting();
+                //SettingManager.Instance.StartSetting();
+                UIManager.Instance.ShowUI<SettingPanel>();
             });
         });
     }

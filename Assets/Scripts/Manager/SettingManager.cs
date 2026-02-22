@@ -19,8 +19,6 @@ public class SettingManager
             return;
         }
     }
-    public bool isUseBloom {  get; private set; } = true;
-    public Dictionary<EventType, KeyCode> keySettingDic { get; private set; }
     //private EventType[] SettingKeys = { EventType.Track_1,EventType.Track_2,EventType.Track_3,EventType.Track_4 };
     public SettingData settingData { get; private set; }
     private const string settingPath = "SettingData";
@@ -37,7 +35,7 @@ public class SettingManager
     }
     public void ResetSetting()
     {
-        if (settingData.keySetting != null) InputManager.Instance.ClearKeyInputDic();
+        //if (settingData.keySetting != null) InputManager.Instance.ClearKeyInputDic();
         settingData = new SettingData();
         InputManager.Instance.SetKeyInputDic(settingData.keySetting);
         Save();
@@ -53,75 +51,56 @@ public class SettingManager
         if(AudioManager.Instance != null) AudioManager.Instance.SetMusicVolume(volume);
         Save();
     }
-    public void StartSetting()
-    {
-        Queue<BaseSettingInfo> infos = new Queue<BaseSettingInfo>();
-        infos.Enqueue(new SettingInfo<float>(settingData.musicVolume,"“Ù¿÷“Ù¡ø",
-                                             SettingInfoDisPlayType.Text_Slider,(value)=>
-        {
-            SetMusicVolume(value);
-        }));
-        infos.Enqueue(new SettingInfo<bool>(settingData.isUseBloom,"Bloom",
-                                            SettingInfoDisPlayType.Text_Toggle,(value) =>
-        {
-            SetUseBloom(value);
-        }));
-        if (Platform.IsPCPlatform())
-        {
-            foreach (var item in settingData.keySetting)
-            {
-                SettingInfo info = new SettingInfo();
-                info.title = item.Key.ToString();
-                info.infoText = item.Value.ToString();
-                info.callback = () =>
-                {
-                    ChangeKey(item.Key, (key) =>
-                    {
-                        info.infoText = key.ToString();
-                        info.updateText?.Invoke();
-                    });
-                    //if (InputManager.Instance.isCheckInput) 
-                    //else info.infoText = item.Value.ToString();
-                    info.infoText = "«Î ‰»Î";
-                };
-                infos.Enqueue(info);
-            }
-        }
-        UIManager.Instance.ShowUI<SettingPanel>();
-        SettingPanel panel = UIManager.Instance.GetUI<SettingPanel>();
-        panel.DisplaySettingInfo(infos);
-    }
+    
     private void Save()
     {
         DataManager.Instance.SaveSettingData(settingPath, settingData);
+        EventBus.Instance.TriggerEvent(EventType.Update_SettingData);
     }
-}
-public enum SettingInfoDisPlayType
-{
-    Text_Button,
-    Text_Slider,
-    Text_Toggle,
 }
 public abstract class BaseSettingInfo 
 {
     public string title;
-    public SettingInfoDisPlayType type;
+    public UnityAction updateDisplay;
+    public abstract object GetValue();
+    public abstract void OnValueChanged(object value);
 }
-public class SettingInfo<T> : BaseSettingInfo
-{
-    public T value;
-    public UnityAction<T> callback;
-    public SettingInfo(T value,string title, SettingInfoDisPlayType type, UnityAction<T> action)
-    {
-        this.title = title;
-        this.type = type;
-        this.callback = action;
-        this.value = value;
-    }
-}
-public class SettingInfo : BaseSettingInfo
+public class ButtonSettingInfo : BaseSettingInfo
 {
     public UnityAction callback;
     public string infoText;
-    public UnityAction updateText;
+    public ButtonSettingInfo(string title)
+    {
+        this.title = title;
+    }
+
+    public override object GetValue() => infoText;
+
+    public override void OnValueChanged(object value) => callback?.Invoke();
+}
+public class SliderSettingInfo : BaseSettingInfo
+{
+    public float value;
+    public UnityAction<float> onValueChanged;
+
+    public override object GetValue() => value;
+
+    public override void OnValueChanged(object value) => onValueChanged?.Invoke((float)value);
+    public SliderSettingInfo(float value, string title)
+    {
+        this.value = value;
+        this.title = title;
+    }
+}
+public class ToggleSettingInfo : BaseSettingInfo
+{
+    public bool value;
+    public UnityAction<bool> onValueChanged;
+    public override object GetValue() => value;
+    public override void OnValueChanged(object value) => onValueChanged?.Invoke((bool)value);
+    public ToggleSettingInfo(bool value,string title)
+    {
+        this.value= value;
+        this.title= title;
+    }
 }
