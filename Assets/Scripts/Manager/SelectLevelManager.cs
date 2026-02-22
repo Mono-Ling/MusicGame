@@ -9,6 +9,7 @@ public class SelectLevelManager
     public LevelDataList levels { get; private set; }
     private List<UnitData> unitList;
     private AudioClip audio;
+    private List<EffectKeyframeData> effectList;
     private Sprite coverSprite;
     private string description;
     private int levelIndex;
@@ -55,6 +56,14 @@ public class SelectLevelManager
         if (audio == null) Debug.LogError($"路径{path}不存在");
         return audio;
     }
+    public List<EffectKeyframeData> GetEffectKeyframeDatas()
+    {
+        if(effectList != null) return effectList;
+        string path = levels.levelList[levelIndex].effectDataPath;
+        effectList = DataManager.Instance.GetEffectKeyframeList(levels.levelList[levelIndex]);
+        if(effectList == null) Debug.Log("该场景不存在后处理");
+        return effectList;
+    }
     public Sprite GetCoverSprite()
     {
         if(coverSprite != null) return coverSprite;
@@ -84,6 +93,7 @@ public class SelectLevelManager
         ClearSelectBuffer();
         GetLevelMusicClip();
         GetLevelUnitDatas();
+        GetEffectKeyframeDatas();
     }
     public bool CheckLevelData()
     {

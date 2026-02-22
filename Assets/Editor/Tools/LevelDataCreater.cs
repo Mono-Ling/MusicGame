@@ -104,6 +104,8 @@ public class LevelDataCreater : EditorWindow
         EditorGUILayout.Space();
         level.unitDataPath = EditorGUILayout.TextField("音符配置文件路径",level.unitDataPath);
         EditorGUILayout.Space();
+        level.effectDataPath = EditorGUILayout.TextField("特效配置文件路径", level.effectDataPath);
+        EditorGUILayout.Space();
         level.time = EditorGUILayout.FloatField("时长",level.time);
         EditorGUILayout.Space();
         level.level = EditorGUILayout.IntField("等级",level.level);

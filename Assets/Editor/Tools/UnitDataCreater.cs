@@ -56,6 +56,7 @@ public class UnitDataCreater : EditorWindow
             else
                 unitDatas.Insert(0,new UnitData());
             addIndex = unitDatas.Count - 1;
+            removeIndex = unitDatas.Count - 1;
         }
         EditorGUILayout.Space();
         removeIndex = EditorGUILayout.IntField("ÒÆ³ýË÷Òý", removeIndex);
@@ -63,6 +64,7 @@ public class UnitDataCreater : EditorWindow
         {
             unitDatas.RemoveAt(removeIndex);
             removeIndex = unitDatas.Count - 1;
+            addIndex = unitDatas.Count - 1;
         }
         EditorGUILayout.Space();
         if (path != null && unitDatas != null && GUILayout.Button("±£´æ"))
