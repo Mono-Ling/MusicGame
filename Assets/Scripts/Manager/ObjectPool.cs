@@ -144,7 +144,10 @@ public class PoolItem
         }
         foreach (var item in usedItems)
         {
-            if (item is Component component) GameObject.Destroy(component.gameObject);
+            try
+            {
+                if (item is Component component) GameObject.Destroy(component.gameObject);
+            } catch { }
         }
         objectPool.Clear();
         usedItems.Clear();
