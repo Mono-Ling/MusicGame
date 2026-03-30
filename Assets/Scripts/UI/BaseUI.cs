@@ -13,7 +13,7 @@ public abstract class BaseUI : MonoBehaviour
     protected UnityAction showCallback;
     protected UnityAction hideCallback;
     protected bool isShow;
-    protected virtual void Awake()
+    private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
     }

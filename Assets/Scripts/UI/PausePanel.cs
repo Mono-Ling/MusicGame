@@ -22,7 +22,6 @@ public class PausePanel : BaseUI
     {
         UIManager.Instance.HideUI<PausePanel>(() =>
         {
-            EventBus.Instance.TriggerEvent(EventType.EndGame);
             SceneManager.LoadScene("Begin");
             ObjectPool.Instance.ClearPool();
         });
