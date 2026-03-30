@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,13 +26,12 @@ public class UnitManager : MonoBehaviour
     {
         mainCamera = Camera.main;
 
-        EventBus.Instance.AddListener<KeyInputType>(EventType.Track_1,Track_1);
-        EventBus.Instance.AddListener<KeyInputType>(EventType.Track_2, Track_2);
-        EventBus.Instance.AddListener<KeyInputType>(EventType.Track_3, Track_3);
-        EventBus.Instance.AddListener<KeyInputType>(EventType.Track_4, Track_4);
+        EventBus.Instance.AddListener<InputType>(EventType.Track_1,Track_1);
+        EventBus.Instance.AddListener<InputType>(EventType.Track_2, Track_2);
+        EventBus.Instance.AddListener<InputType>(EventType.Track_3, Track_3);
+        EventBus.Instance.AddListener<InputType>(EventType.Track_4, Track_4);
 
-        EventBus.Instance.AddListener<Track>(EventType.ScreenInputTrackDown, ScreenInputDown);
-        EventBus.Instance.AddListener<Track>(EventType.ScreenInputTrackUp, ScreenInputUp);
+        EventBus.Instance.AddListener<(Track,InputType)>(EventType.ScreenInput,ScreenInput);
     }
 
     // Update is called once per frame
@@ -65,30 +65,30 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    private void Track_1(KeyInputType inputType)
+    private void Track_1(InputType inputType)
     {
         KeyTrackInput(tracks[0], inputType);
     }
-    private void Track_2(KeyInputType inputType)
+    private void Track_2(InputType inputType)
     {
         KeyTrackInput(tracks[1], inputType);
     }
-    private void Track_3(KeyInputType inputType)
+    private void Track_3(InputType inputType)
     {
         KeyTrackInput(tracks[2], inputType);
     }
-    private void Track_4(KeyInputType inputType)
+    private void Track_4(InputType inputType)
     {
         KeyTrackInput(tracks[3],inputType);
     }
-    private void KeyTrackInput(Track track, KeyInputType inputType)
+    private void KeyTrackInput(Track track, InputType inputType)
     {
         switch (inputType)
         {
-            case KeyInputType.Down:
+            case InputType.Down:
                 InputDown(track, time);
                 break;
-            case KeyInputType.Up:
+            case InputType.Up:
                 InputUp(track, time);
                 break;
             default:
@@ -96,8 +96,18 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    private void ScreenInputDown(Track track) { InputDown(track, time); }
-    private void ScreenInputUp(Track track) { InputUp(track, time); }
+    private void ScreenInput((Track track, InputType inputType) input)
+    {
+        switch(input.inputType)
+        {
+            case InputType.Down:
+                InputDown(input.track, time);
+                break;
+            case InputType.Up:
+                InputUp(input.track, time);
+                break;
+        }
+    }
 
     private void InputDown(Track track,float time)
     {
@@ -140,12 +150,11 @@ public class UnitManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        EventBus.Instance.RemoveListener<KeyInputType>(EventType.Track_1, Track_1);
-        EventBus.Instance.RemoveListener<KeyInputType>(EventType.Track_2, Track_2);
-        EventBus.Instance.RemoveListener<KeyInputType>(EventType.Track_3, Track_3);
-        EventBus.Instance.RemoveListener<KeyInputType>(EventType.Track_4, Track_4);
+        EventBus.Instance.RemoveListener<InputType>(EventType.Track_1, Track_1);
+        EventBus.Instance.RemoveListener<InputType>(EventType.Track_2, Track_2);
+        EventBus.Instance.RemoveListener<InputType>(EventType.Track_3, Track_3);
+        EventBus.Instance.RemoveListener<InputType>(EventType.Track_4, Track_4);
 
-        EventBus.Instance.RemoveListener<Track>(EventType.ScreenInputTrackDown, ScreenInputDown);
-        EventBus.Instance.RemoveListener<Track>(EventType.ScreenInputTrackUp, ScreenInputUp);
+        EventBus.Instance.RemoveListener<(Track, InputType)>(EventType.ScreenInput, ScreenInput);
     }
 }

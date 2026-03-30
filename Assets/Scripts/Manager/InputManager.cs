@@ -89,8 +89,7 @@ public class InputManager : MonoBehaviour
         if (gamePanel != null) StopInput(false);
         UIManager.Instance.ShowUI<GamePanel>();
         gamePanel = UIManager.Instance.GetUI<GamePanel>();
-        gamePanel.InputDown += ScreenInputDown;
-        gamePanel.InputUp += ScreenInputUp;
+        gamePanel.SceenInput += ScreenInput;
         gamePanel.InputPause += () =>
         {
             //PauseGame?.Invoke(); 
@@ -143,27 +142,15 @@ public class InputManager : MonoBehaviour
     }
     private void KeyInputUnit(EventType eventType, KeyCode key)
     {
-        KeyInputType inputType = KeyInputType.None;
-        if (Input.GetKeyDown(key)) inputType = KeyInputType.Down;
-        else if (Input.GetKeyUp(key)) inputType = KeyInputType.Up;
-        if(inputType == KeyInputType.None) return;
-        EventBus.Instance.TriggerEvent<KeyInputType>(eventType, inputType);
+        InputType inputType = InputType.None;
+        if (Input.GetKeyDown(key)) inputType = InputType.Down;
+        else if (Input.GetKeyUp(key)) inputType = InputType.Up;
+        if(inputType == InputType.None) return;
+        EventBus.Instance.TriggerEvent<InputType>(eventType, inputType);
     }
-    private void ScreenInputDown(GameObject obj)
+    private void ScreenInput((Track,InputType) input)
     {
-        if (obj == null) return;
-        if (obj.CompareTag("Track"))
-        {
-            EventBus.Instance.TriggerEvent<Track>(EventType.ScreenInputTrackDown, obj.GetComponent<Track>());
-        }
-    }
-    private void ScreenInputUp(GameObject obj)
-    {
-        if (obj == null) return;
-        if (obj.CompareTag("Track"))
-        {
-            EventBus.Instance.TriggerEvent<Track>(EventType.ScreenInputTrackUp, obj.GetComponent<Track>());
-        }
+        EventBus.Instance.TriggerEvent<(Track,InputType)>(EventType.ScreenInput,input);
     }
     private void OnDestroy()
     {
@@ -172,7 +159,7 @@ public class InputManager : MonoBehaviour
         UIManager.Instance.HideUI<GamePanel>();
     }
 }
-public enum KeyInputType
+public enum InputType
 {
     None,
     Down,

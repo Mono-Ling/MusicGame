@@ -19,6 +19,11 @@ public enum EventType
     ScreenInputTrackUp,
 
     /// <summary>
+    /// (Track,KeyInputType)元组参数
+    /// </summary>
+    ScreenInput,
+
+    /// <summary>
     /// KeyInputType参数类型
     /// </summary>
     Track_1,

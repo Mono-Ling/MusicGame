@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 public class GamePanel : BaseUI,IPointerDownHandler,IPointerUpHandler
 {
-    public event UnityAction<GameObject> InputDown;
-    public event UnityAction<GameObject> InputUp;
+    public event UnityAction<(Track, InputType)> SceenInput;
     public event UnityAction InputPause;
     public Button butPause;
     private Camera mainCamera;
@@ -20,14 +19,18 @@ public class GamePanel : BaseUI,IPointerDownHandler,IPointerUpHandler
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        Vector2 pointerPosition = mainCamera.ScreenToWorldPoint(eventData.position);
-        Collider2D hit = Physics2D.OverlapPoint(pointerPosition);
-        if (hit != null) InputDown?.Invoke(hit.gameObject);
+        GetTrackInput(eventData,InputType.Down);
     }
     public void OnPointerUp(PointerEventData eventData)
     {
+        GetTrackInput(eventData,InputType.Up);
+    }
+    private void GetTrackInput(PointerEventData eventData,InputType inputType)
+    {
         Vector2 pointerPosition = mainCamera.ScreenToWorldPoint(eventData.position);
         Collider2D hit = Physics2D.OverlapPoint(pointerPosition);
-        if (hit != null) InputUp?.Invoke(hit.gameObject);
+        if(hit == null) return;
+        GameObject obj = hit.gameObject;
+        if (obj.CompareTag("Track")) SceenInput?.Invoke((obj.GetComponent<Track>(), inputType));
     }
 }

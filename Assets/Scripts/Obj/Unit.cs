@@ -127,6 +127,7 @@ public abstract class Unit : MonoBehaviour,IPoolItem
     {
         state = UnitState.Miss;
         material .SetFloat("_Alpha",missShaderAlpha);
+        callback += DestoryUnit;
         this.callback = callback;
     }
     public virtual void DestoryUnit()
