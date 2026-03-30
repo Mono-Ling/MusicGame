@@ -125,13 +125,10 @@ public class PoolItem
             Debug.LogError($"{obj}未实现对象池接口");
             return;
         }
-        if (extendType == ExtendType.Extend && poolCount >= maxNum)
-        {
-            GameObject.Destroy(obj);
-            return;
-        }
         item.OnReset();
-        objectPool.Enqueue(item);
+        if (extendType == ExtendType.Extend && poolCount >= maxNum)
+            GameObject.Destroy(obj);
+        else objectPool.Enqueue(item);
         //usedItems.Remove(item);
     }
     public void AddUsed(IPoolItem item)
