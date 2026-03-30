@@ -139,6 +139,7 @@ public abstract class Unit : MonoBehaviour,IPoolItem
     private void OnDestroy()
     {
         if(material != null) Destroy(material);
+        OnReset();
     }
     public void OnReset()
     {

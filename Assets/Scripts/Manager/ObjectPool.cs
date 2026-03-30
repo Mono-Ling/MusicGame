@@ -20,13 +20,13 @@ public class ObjectPool
         GameObject obj = null;
         PoolItem poolItem = poolDic[name];
         IPoolItem item = poolItem.Get(name);
-        if (obj == null && item is Component component) obj = component.gameObject;
+        if (item is Component component) obj = component.gameObject;
         obj?.SetActive(true);
         return obj;
     }
     public void PutObject(GameObject obj)
     {
-        if(obj == null) return;
+        if (obj == null || !obj) return;
         string name = obj.name;
         obj.SetActive(false);
         if(!poolDic.ContainsKey(name)) return;
@@ -76,7 +76,7 @@ public class PoolItem
     public IPoolItem Get(string name)
     {
         IPoolItem item = null;
-        if(poolCount > 0) item = objectPool.Dequeue();
+        if (poolCount > 0) item = objectPool.Dequeue();
         else
         {
             if (usedCount > maxNum)
@@ -116,7 +116,7 @@ public class PoolItem
     }
     public void Put(GameObject obj)
     {
-        if (obj == null) return;
+        if (obj == null || !obj) return;
         //item.Init();
         IPoolItem item = obj.GetComponent<IPoolItem>();
         if (item != null) usedItems.Remove(item);
@@ -140,14 +140,11 @@ public class PoolItem
     {
         foreach (var item in objectPool)
         {
-            if (item is Component component) GameObject.Destroy(component.gameObject);
+            if (item is Component component && component.gameObject!=null) GameObject.Destroy(component.gameObject);
         }
         foreach (var item in usedItems)
         {
-            try
-            {
-                if (item is Component component) GameObject.Destroy(component.gameObject);
-            } catch { }
+            if (item is Component component && !component.gameObject) GameObject.Destroy(component.gameObject);
         }
         objectPool.Clear();
         usedItems.Clear();

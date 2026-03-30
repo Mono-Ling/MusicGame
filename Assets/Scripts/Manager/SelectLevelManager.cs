@@ -114,7 +114,6 @@ public class SelectLevelManager
     {
         coverSprite = null;
         description = null;
-        ObjectPool.Instance.ClearPool();
         Resources.UnloadUnusedAssets();
         GC.Collect();
         Debug.Log("选择阶段缓存释放完成");

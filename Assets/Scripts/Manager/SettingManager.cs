@@ -18,6 +18,7 @@ public class SettingManager
             Debug.Log("写入默认设置数据");
             return;
         }
+        Application.targetFrameRate = 60;
     }
     //private EventType[] SettingKeys = { EventType.Track_1,EventType.Track_2,EventType.Track_3,EventType.Track_4 };
     public SettingData settingData { get; private set; }

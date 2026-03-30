@@ -28,6 +28,7 @@ public class SettingPanel : BaseUI
     }
     private void Quit()
     {
+        ObjectPool.Instance.ClearPool();
         UIManager.Instance.HideUI<SettingPanel>(()=>
         {
             UIManager.Instance.ShowUI<SelectLevelPanel>();
