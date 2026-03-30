@@ -169,7 +169,6 @@ MonoBehaviour:
   max: 0.8
   material: {fileID: 2100000, guid: b48192edfd9587b42aa5a59f0204c64e, type: 2}
   isNormalize: 1
-  updateInterval: 3
 --- !u!212 &496168023
 SpriteRenderer:
   m_ObjectHideFlags: 0
