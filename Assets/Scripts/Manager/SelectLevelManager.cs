@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class SelectLevelManager
 {
@@ -111,21 +110,20 @@ public class SelectLevelManager
     {
         return levels.levelList[levelIndex].time;
     }
-    private void ClearSelectBuffer(UnityAction action = null)
+    private void ClearSelectBuffer()
     {
         coverSprite = null;
         description = null;
         GC.Collect();
-        action?.Invoke();
         Debug.Log("选择阶段缓存释放完成");
     }
-    public void ExitSelectPanel(UnityAction action = null)
+    public void ExitSelectPanel()
     {
         GetLevelMusicClip();
         GetLevelUnitDatas();
         GetEffectKeyframeDatas();
         GetUnitMoveTimeKeyframeDatas();
-        ClearSelectBuffer(action);
+        ClearSelectBuffer();
     }
     public bool CheckLevelData()
     {
