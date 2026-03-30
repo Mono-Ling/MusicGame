@@ -8,6 +8,7 @@ public class Track : MonoBehaviour
     public int id;
     public List<Unit> actionUnits = new List<Unit>();
     public Unit holdingUnit = null;
+    public int currentUnitIndex = 0;
     private BoxCollider2D boxCollider;
     private void Start()
     {
@@ -22,7 +23,7 @@ public class Track : MonoBehaviour
     public Unit ComparInputUnit(float time, float window)
     {
         int length = actionUnits.Count;
-        int left = 0;
+        int left = currentUnitIndex;
         int right = length - 1;
         int targetIndex = -1;
         Unit targetUnit = null;

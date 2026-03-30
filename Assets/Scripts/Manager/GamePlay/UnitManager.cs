@@ -51,11 +51,14 @@ public class UnitManager : MonoBehaviour
         {
             if (tracks[i].actionUnits.Count == 0)
                 continue;
-            Unit unit = tracks[i].actionUnits[0];
+            int currentIndex = tracks[i].currentUnitIndex;
+            if(currentIndex >= tracks[i].actionUnits.Count) continue;
+            Unit unit = tracks[i].actionUnits[currentIndex];
             if (unit == null || time - unit.unitHitTime > window)
             {
                 unit.UnitMiss(/*() => { unit.DestoryUnit(); }*/);//miss回调函数中已添加销毁对象
-                tracks[i].actionUnits.RemoveAt(0);
+                //tracks[i].actionUnits.RemoveAt(0);
+                tracks[i].currentUnitIndex++;
 
                 DisplayResultManager.Instance.GetMissResult();
             }

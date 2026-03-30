@@ -36,6 +36,10 @@ public class ObjectPool
     }
     public void ClearPool()
     {
+        foreach(PoolItem poolItem in poolDic.Values)
+        {
+            poolItem.ClearPool();
+        }
         poolDic.Clear();
         Debug.Log("¶ÔÏó³ØÇå¿Õ");
     }
@@ -134,6 +138,19 @@ public class PoolItem
     {
         if (item == null) return;
         usedItems.Add(item);
+    }
+    public void ClearPool()
+    {
+        foreach (var item in objectPool)
+        {
+            if (item is Component component) GameObject.Destroy(component.gameObject);
+        }
+        foreach (var item in usedItems)
+        {
+            if (item is Component component) GameObject.Destroy(component.gameObject);
+        }
+        objectPool.Clear();
+        usedItems.Clear();
     }
     public PoolItem(string name) 
     {
